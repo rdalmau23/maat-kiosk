@@ -1,0 +1,281 @@
+[
+    {
+        "id": "c1",
+        "name": "BJJ / Grappling",
+        "discipline": "bjj",
+        "startTime": "07:00",
+        "endTime": "08:30",
+        "instructor": "Lautaro S.",
+        "instructorAvatar": "https://randomuser.me/api/portraits/men/33.jpg",
+        "capacity": 30,
+        "bannerImage": "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=800&q=80",
+        "attendees": [
+            {
+                "memberId": "1",
+                "status": "confirmed",
+                "registeredAt": "07:00"
+            },
+            {
+                "memberId": "3",
+                "status": "confirmed",
+                "registeredAt": "07:05"
+            },
+            {
+                "memberId": "6",
+                "status": "registered",
+                "registeredAt": "07:10"
+            },
+            {
+                "memberId": "10",
+                "status": "confirmed",
+                "registeredAt": "07:15"
+            },
+            {
+                "memberId": "14",
+                "status": "registered",
+                "registeredAt": "07:20"
+            }
+        ]
+    },
+    {
+        "id": "c2",
+        "name": "Wrestling Fundamentals",
+        "discipline": "wrestling",
+        "startTime": "08:00",
+        "endTime": "09:30",
+        "instructor": "Noah B.",
+        "instructorAvatar": "https://randomuser.me/api/portraits/men/36.jpg",
+        "capacity": 20,
+        "bannerImage": "https://images.unsplash.com/photo-1547153760-18fc86324498?w=800&q=80",
+        "attendees": [
+            {
+                "memberId": "5",
+                "status": "confirmed",
+                "registeredAt": "08:00"
+            },
+            {
+                "memberId": "11",
+                "status": "confirmed",
+                "registeredAt": "08:05"
+            },
+            {
+                "memberId": "13",
+                "status": "registered",
+                "registeredAt": "08:10"
+            },
+            {
+                "memberId": "17",
+                "status": "confirmed",
+                "registeredAt": "08:15"
+            },
+            {
+                "memberId": "19",
+                "status": "registered",
+                "registeredAt": "08:20"
+            }
+        ]
+    },
+    {
+        "id": "c3",
+        "name": "Kids BJJ",
+        "discipline": "kids",
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "instructor": "Marco L.",
+        "instructorAvatar": "https://randomuser.me/api/portraits/men/34.jpg",
+        "capacity": 15,
+        "bannerImage": "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80",
+        "attendees": [
+            {
+                "memberId": "2",
+                "status": "confirmed",
+                "registeredAt": "09:00"
+            },
+            {
+                "memberId": "8",
+                "status": "confirmed",
+                "registeredAt": "09:05"
+            },
+            {
+                "memberId": "16",
+                "status": "registered",
+                "registeredAt": "09:10"
+            }
+        ]
+    },
+    {
+        "id": "c4",
+        "name": "MMA Fundamentals",
+        "discipline": "mma",
+        "startTime": "10:00",
+        "endTime": "11:30",
+        "instructor": "Carlos F.",
+        "instructorAvatar": "https://randomuser.me/api/portraits/men/35.jpg",
+        "capacity": 25,
+        "bannerImage": "https://images.unsplash.com/photo-1591117207239-788bf8de6c3b?w=800&q=80",
+        "attendees": [
+            {
+                "memberId": "4",
+                "status": "confirmed",
+                "registeredAt": "10:00"
+            },
+            {
+                "memberId": "7",
+                "status": "registered",
+                "registeredAt": "10:05"
+            },
+            {
+                "memberId": "12",
+                "status": "confirmed",
+                "registeredAt": "10:10"
+            },
+            {
+                "memberId": "18",
+                "status": "confirmed",
+                "registeredAt": "10:15"
+            },
+            {
+                "memberId": "22",
+                "status": "registered",
+                "registeredAt": "10:20"
+            },
+            {
+                "memberId": "24",
+                "status": "confirmed",
+                "registeredAt": "10:25"
+            }
+        ]
+    },
+    {
+        "id": "c5",
+        "name": "Open Mat",
+        "discipline": "grappling",
+        "startTime": "11:00",
+        "endTime": "13:00",
+        "instructor": "Lautaro S.",
+        "instructorAvatar": "https://randomuser.me/api/portraits/men/33.jpg",
+        "capacity": 40,
+        "bannerImage": "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&q=80",
+        "attendees": [
+            {
+                "memberId": "6",
+                "status": "confirmed",
+                "registeredAt": "11:00"
+            },
+            {
+                "memberId": "9",
+                "status": "registered",
+                "registeredAt": "11:10"
+            },
+            {
+                "memberId": "15",
+                "status": "confirmed",
+                "registeredAt": "11:20"
+            }
+        ]
+    },
+    {
+        "id": "c6",
+        "name": "CrossFit WOD",
+        "discipline": "crossfit",
+        "startTime": "12:00",
+        "endTime": "13:00",
+        "instructor": "Noah B.",
+        "instructorAvatar": "https://randomuser.me/api/portraits/men/36.jpg",
+        "capacity": 20,
+        "bannerImage": "https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=800&q=80",
+        "attendees": [
+            {
+                "memberId": "20",
+                "status": "confirmed",
+                "registeredAt": "12:00"
+            },
+            {
+                "memberId": "23",
+                "status": "registered",
+                "registeredAt": "12:05"
+            }
+        ]
+    },
+    {
+        "id": "c7",
+        "name": "Kickboxing",
+        "discipline": "kickboxing",
+        "startTime": "16:00",
+        "endTime": "17:00",
+        "instructor": "Carlos F.",
+        "instructorAvatar": "https://randomuser.me/api/portraits/men/35.jpg",
+        "capacity": 20,
+        "bannerImage": "https://images.unsplash.com/photo-1615117950638-2e3f8b5a7b8d?w=800&q=80",
+        "attendees": [
+            {
+                "memberId": "5",
+                "status": "confirmed",
+                "registeredAt": "16:00"
+            },
+            {
+                "memberId": "11",
+                "status": "registered",
+                "registeredAt": "16:05"
+            },
+            {
+                "memberId": "17",
+                "status": "confirmed",
+                "registeredAt": "16:10"
+            },
+            {
+                "memberId": "21",
+                "status": "registered",
+                "registeredAt": "16:15"
+            }
+        ]
+    },
+    {
+        "id": "c8",
+        "name": "Advanced BJJ",
+        "discipline": "bjj",
+        "startTime": "18:00",
+        "endTime": "19:30",
+        "instructor": "Lautaro S.",
+        "instructorAvatar": "https://randomuser.me/api/portraits/men/33.jpg",
+        "capacity": 30,
+        "bannerImage": "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=800&q=80",
+        "attendees": [
+            {
+                "memberId": "1",
+                "status": "confirmed",
+                "registeredAt": "18:00"
+            },
+            {
+                "memberId": "2",
+                "status": "confirmed",
+                "registeredAt": "18:05"
+            },
+            {
+                "memberId": "4",
+                "status": "registered",
+                "registeredAt": "18:10"
+            },
+            {
+                "memberId": "8",
+                "status": "confirmed",
+                "registeredAt": "18:15"
+            },
+            {
+                "memberId": "10",
+                "status": "registered",
+                "registeredAt": "18:20"
+            },
+            {
+                "memberId": "14",
+                "status": "confirmed",
+                "registeredAt": "18:25"
+            },
+            {
+                "memberId": "18",
+                "status": "registered",
+                "registeredAt": "18:30"
+            }
+        ]
+    }
+]

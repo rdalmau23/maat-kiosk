@@ -1,0 +1,146 @@
+[
+    {
+        "id": "1",
+        "firstName": "Anna",
+        "lastName": "Rossi",
+        "profilePicture": "https://randomuser.me/api/portraits/women/1.jpg"
+    },
+    {
+        "id": "2",
+        "firstName": "Marco",
+        "lastName": "Lopez",
+        "profilePicture": "https://randomuser.me/api/portraits/men/2.jpg"
+    },
+    {
+        "id": "3",
+        "firstName": "Sofia",
+        "lastName": "Martinez",
+        "profilePicture": "https://randomuser.me/api/portraits/women/3.jpg"
+    },
+    {
+        "id": "4",
+        "firstName": "Carlos",
+        "lastName": "Fernandez",
+        "profilePicture": "https://randomuser.me/api/portraits/men/4.jpg"
+    },
+    {
+        "id": "5",
+        "firstName": "Laura",
+        "lastName": "García",
+        "profilePicture": "https://randomuser.me/api/portraits/women/5.jpg"
+    },
+    {
+        "id": "6",
+        "firstName": "David",
+        "lastName": "Kim",
+        "profilePicture": "https://randomuser.me/api/portraits/men/6.jpg"
+    },
+    {
+        "id": "7",
+        "firstName": "Elena",
+        "lastName": "Sánchez",
+        "profilePicture": "https://randomuser.me/api/portraits/women/7.jpg"
+    },
+    {
+        "id": "8",
+        "firstName": "Mohamed",
+        "lastName": "Ahmet",
+        "profilePicture": "https://randomuser.me/api/portraits/men/8.jpg"
+    },
+    {
+        "id": "9",
+        "firstName": "Isabella",
+        "lastName": "Conti",
+        "profilePicture": "https://randomuser.me/api/portraits/women/9.jpg"
+    },
+    {
+        "id": "10",
+        "firstName": "Lucas",
+        "lastName": "Dupont",
+        "profilePicture": "https://randomuser.me/api/portraits/men/10.jpg"
+    },
+    {
+        "id": "11",
+        "firstName": "Mia",
+        "lastName": "Hansen",
+        "profilePicture": "https://randomuser.me/api/portraits/women/11.jpg"
+    },
+    {
+        "id": "12",
+        "firstName": "James",
+        "lastName": "Okafor",
+        "profilePicture": "https://randomuser.me/api/portraits/men/12.jpg"
+    },
+    {
+        "id": "13",
+        "firstName": "Yuki",
+        "lastName": "Tanaka",
+        "profilePicture": "https://randomuser.me/api/portraits/women/13.jpg"
+    },
+    {
+        "id": "14",
+        "firstName": "Alejandro",
+        "lastName": "Torres",
+        "profilePicture": "https://randomuser.me/api/portraits/men/14.jpg"
+    },
+    {
+        "id": "15",
+        "firstName": "Chiara",
+        "lastName": "Bianchi",
+        "profilePicture": "https://randomuser.me/api/portraits/women/15.jpg"
+    },
+    {
+        "id": "16",
+        "firstName": "Noah",
+        "lastName": "Berg",
+        "profilePicture": "https://randomuser.me/api/portraits/men/16.jpg"
+    },
+    {
+        "id": "17",
+        "firstName": "Priya",
+        "lastName": "Sharma",
+        "profilePicture": "https://randomuser.me/api/portraits/women/17.jpg"
+    },
+    {
+        "id": "18",
+        "firstName": "Luca",
+        "lastName": "Ferrari",
+        "profilePicture": "https://randomuser.me/api/portraits/men/18.jpg"
+    },
+    {
+        "id": "19",
+        "firstName": "Amelia",
+        "lastName": "Johnson",
+        "profilePicture": "https://randomuser.me/api/portraits/women/19.jpg"
+    },
+    {
+        "id": "20",
+        "firstName": "Tomás",
+        "lastName": "Novak",
+        "profilePicture": "https://randomuser.me/api/portraits/men/20.jpg"
+    },
+    {
+        "id": "21",
+        "firstName": "Fatima",
+        "lastName": "Al-Hassan",
+        "profilePicture": "https://randomuser.me/api/portraits/women/21.jpg"
+    },
+    {
+        "id": "22",
+        "firstName": "Ethan",
+        "lastName": "Clarke",
+        "profilePicture": "https://randomuser.me/api/portraits/men/22.jpg"
+    },
+    {
+        "id": "23",
+        "firstName": "Valentina",
+        "lastName": "Russo",
+        "profilePicture": "https://randomuser.me/api/portraits/women/23.jpg"
+    },
+    {
+        "id": "24",
+        "firstName": "Rafael",
+        "lastName": "Da Silva",
+        "profilePicture": "https://randomuser.me/api/portraits/men/24.jpg"
+    }
+]

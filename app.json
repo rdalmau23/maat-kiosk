@@ -25,6 +25,24 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "scheme": "maat-kiosk",
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "e496c766-d805-4c11-bdb5-2fcb125e0c0d"
+      }
+    },
+    "owner": "rdalmau",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/e496c766-d805-4c11-bdb5-2fcb125e0c0d"
     }
   }
 }
