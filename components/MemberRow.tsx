@@ -45,7 +45,13 @@ export function MemberRow({
             activeOpacity={onPress ? 0.7 : 1}
             disabled={!onPress}
         >
-            <Image source={{ uri: profilePicture }} style={styles.avatar} />
+            {profilePicture ? (
+                <Image source={{ uri: profilePicture }} style={styles.avatar} />
+            ) : (
+                <View style={[styles.avatar, styles.avatarPlaceholder]}>
+                    <Feather name="user" size={20} color={Colors.textMuted} />
+                </View>
+            )}
 
             <View style={styles.info}>
                 <Text style={styles.name}>
@@ -87,6 +93,10 @@ const styles = StyleSheet.create({
         height: 44,
         borderRadius: Radii.full,
         backgroundColor: Colors.surface,
+    },
+    avatarPlaceholder: {
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     info: {
         flex: 1,
