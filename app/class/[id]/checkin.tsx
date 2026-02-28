@@ -12,16 +12,19 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { Text } from '@/components/Text';
 import { Colors, Spacing, Typography, Radii, Shadow } from '@/constants/theme';
-import { fetchClass, insertCheckIn } from '@/lib/api';
+import { fetchClass, insertCheckIn, deleteCheckIn } from '@/lib/api';
 
 export default function CheckInScreen() {
-    const { id: classId, memberId, memberName, memberAvatar } =
+    const { id: classId, memberId, memberName, memberAvatar, isCheckedIn } =
         useLocalSearchParams<{
             id: string;
             memberId: string;
             memberName: string;
             memberAvatar: string;
+            isCheckedIn?: string;
         }>();
+
+    const isAlreadyCheckedIn = isCheckedIn === 'true';
 
     const [className, setClassName] = useState('');
     const [loading, setLoading] = useState(true);
@@ -40,14 +43,19 @@ export default function CheckInScreen() {
         if (!classId || !memberId || submitting) return;
         setSubmitting(true);
         try {
-            await insertCheckIn(classId, memberId);
-            router.replace({
-                pathname: '/success',
-                params: { memberName, className, classId },
-            });
+            if (isAlreadyCheckedIn) {
+                await deleteCheckIn(classId, memberId);
+                router.back();
+            } else {
+                await insertCheckIn(classId, memberId);
+                router.replace({
+                    pathname: '/success',
+                    params: { memberName, className, classId },
+                });
+            }
         } catch (e: any) {
             setSubmitting(false);
-            Alert.alert('Check-in failed', e?.message ?? 'Please try again.');
+            Alert.alert('Action failed', e?.message ?? 'Please try again.');
         }
     };
 
@@ -72,7 +80,7 @@ export default function CheckInScreen() {
                 <TouchableOpacity onPress={() => router.back()} style={styles.closeBtn}>
                     <Feather name="x" size={22} color={Colors.text} />
                 </TouchableOpacity>
-                <Text style={styles.topTitle}>Confirm Check-In</Text>
+                <Text style={styles.topTitle}>{isAlreadyCheckedIn ? 'Cancel Check-In' : 'Confirm Check-In'}</Text>
                 <View style={{ width: 38 }} />
             </View>
 
@@ -96,17 +104,23 @@ export default function CheckInScreen() {
             {/* CTA */}
             <View style={styles.footer}>
                 <TouchableOpacity
-                    style={[styles.checkInBtn, submitting && styles.checkInBtnDisabled]}
+                    style={[
+                        styles.checkInBtn,
+                        isAlreadyCheckedIn && styles.cancelBtn,
+                        submitting && styles.checkInBtnDisabled
+                    ]}
                     onPress={handleCheckIn}
                     activeOpacity={0.85}
                     disabled={submitting}
                 >
                     {submitting ? (
-                        <ActivityIndicator color="#fff" />
+                        <ActivityIndicator color={isAlreadyCheckedIn ? Colors.error : "#fff"} />
                     ) : (
                         <>
-                            <Feather name="check" size={22} color="#fff" />
-                            <Text style={styles.checkInText}>Check In</Text>
+                            <Feather name={isAlreadyCheckedIn ? "x" : "check"} size={22} color={isAlreadyCheckedIn ? Colors.error : "#fff"} />
+                            <Text style={[styles.checkInText, isAlreadyCheckedIn && styles.cancelText]}>
+                                {isAlreadyCheckedIn ? 'Cancel Check-in' : 'Check In'}
+                            </Text>
                         </>
                     )}
                 </TouchableOpacity>
@@ -130,6 +144,8 @@ const styles = StyleSheet.create({
     classPillText: { fontSize: Typography.sm, fontWeight: Typography.semibold, color: Colors.text },
     footer: { padding: Spacing.xl, paddingBottom: Spacing.xxxl },
     checkInBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm, backgroundColor: Colors.primary, borderRadius: Radii.full, paddingVertical: Spacing.xl, ...Shadow.md },
+    cancelBtn: { backgroundColor: Colors.errorLight },
     checkInBtnDisabled: { opacity: 0.6 },
     checkInText: { fontSize: Typography.lg, fontWeight: Typography.bold, color: '#fff' },
+    cancelText: { color: Colors.error },
 });

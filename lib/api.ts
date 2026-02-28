@@ -41,9 +41,14 @@ export type CheckIn = {
 
 
 export async function fetchClasses(): Promise<Class[]> {
+    // Only fetch classes for today
+    const today = new Date().toISOString().split('T')[0];
+
     const { data, error } = await supabase
         .from('classes')
         .select('*')
+        .gte('start_time', `${today}T00:00:00.000Z`)
+        .lte('start_time', `${today}T23:59:59.999Z`)
         .order('start_time');
     if (error) throw error;
     return data ?? [];
@@ -121,6 +126,15 @@ export async function insertCheckIn(classId: string, memberId: string): Promise<
     const { error } = await supabase
         .from('check_ins')
         .insert({ class_id: classId, member_id: memberId });
+    if (error) throw error;
+}
+
+export async function deleteCheckIn(classId: string, memberId: string): Promise<void> {
+    const { error } = await supabase
+        .from('check_ins')
+        .delete()
+        .eq('class_id', classId)
+        .eq('member_id', memberId);
     if (error) throw error;
 }
 

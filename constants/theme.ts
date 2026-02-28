@@ -20,7 +20,6 @@ export const Colors = {
         mma: { bg: '#FEF3C7', text: '#B45309' },
         kids: { bg: '#FCE7F3', text: '#BE185D' },
         grappling: { bg: '#EDE9FE', text: '#6D28D9' },
-        crossfit: { bg: '#FFF7ED', text: '#C2410C' },
         wrestling: { bg: '#FEE2E2', text: '#B91C1C' },
         kickboxing: { bg: '#FFF1F2', text: '#9F1239' },
     } as Record<string, { bg: string; text: string }>,

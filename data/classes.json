@@ -176,8 +176,8 @@
     },
     {
         "id": "c6",
-        "name": "CrossFit WOD",
-        "discipline": "crossfit",
+        "name": "MMA Advanced",
+        "discipline": "mma",
         "startTime": "12:00",
         "endTime": "13:00",
         "instructor": "Noah B.",

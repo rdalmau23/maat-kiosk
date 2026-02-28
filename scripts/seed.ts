@@ -38,12 +38,13 @@ async function seed() {
 
     // 2. Classes
     console.log('→ Inserting classes...');
+    const todayDate = new Date().toISOString().split('T')[0];
     const classes = classesData.map((c) => ({
         id: c.id,
         name: c.name,
         discipline: c.discipline,
-        start_time: c.startTime,
-        end_time: c.endTime,
+        start_time: `${todayDate}T${c.startTime}:00.000Z`,
+        end_time: `${todayDate}T${c.endTime}:00.000Z`,
         instructor: c.instructor,
         instructor_avatar: c.instructorAvatar,
         capacity: c.capacity,

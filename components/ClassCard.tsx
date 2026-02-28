@@ -9,6 +9,7 @@ import { Colors, Typography, Spacing, Radii, Shadow } from '@/constants/theme';
 import { TagBadge } from './TagBadge';
 import { Feather } from '@expo/vector-icons';
 import { Text } from '@/components/Text';
+import { formatTime } from '@/utils/formatTime';
 
 interface ClassCardProps {
     id: string;
@@ -51,15 +52,13 @@ export function ClassCard({
                         {name}
                     </Text>
                     <Text style={styles.time}>
-                        {startTime} – {endTime}
+                        {formatTime(startTime)} – {formatTime(endTime)}
                     </Text>
                 </View>
             </View>
 
-            {/* Tag */}
             <TagBadge discipline={discipline} />
 
-            {/* Footer */}
             <View style={styles.footer}>
                 <View style={styles.footerRow}>
                     <Feather name="users" size={11} color={Colors.textMuted} />
@@ -79,7 +78,6 @@ export function ClassCard({
                 </View>
             </View>
 
-            {/* Capacity bar */}
             <View style={styles.barBg}>
                 <View
                     style={[

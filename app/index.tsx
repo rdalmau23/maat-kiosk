@@ -14,6 +14,7 @@ import { Colors, Spacing, Typography } from '@/constants/theme';
 import { ClassCard } from '@/components/ClassCard';
 import { HeroBanner } from '@/components/HeroBanner';
 import { fetchClasses, fetchAttendeeCounts, type Class } from '@/lib/api';
+import { useCacheStore } from '@/store/useCacheStore';
 
 function pairItems<T>(items: T[]): (T | null)[][] {
     const rows: (T | null)[][] = [];
@@ -30,9 +31,11 @@ type ListItem =
     | { type: 'row'; items: (Class | null)[] };
 
 export default function HomeScreen() {
-    const [classes, setClasses] = useState<Class[]>([]);
-    const [counts, setCounts] = useState<Record<string, number>>({});
-    const [loading, setLoading] = useState(true);
+    // Read from cache first (instant loading, works offline)
+    const { classes: cachedClasses, counts: cachedCounts, setClassesData } = useCacheStore();
+
+    // Determine initial loading state: if we have cache, we don't need to block the UI
+    const [loading, setLoading] = useState(cachedClasses.length === 0);
     const [refreshing, setRefreshing] = useState(false);
 
     const load = useCallback(async () => {
@@ -41,15 +44,15 @@ export default function HomeScreen() {
                 fetchClasses(),
                 fetchAttendeeCounts(),
             ]);
-            setClasses(data);
-            setCounts(attendeeCounts);
+            // Update cache store (which triggers a re-render automatically)
+            setClassesData(data, attendeeCounts);
         } catch (e) {
-            console.error('Failed to load classes:', e);
+            console.error('Failed to load classes (offline?):', e);
         } finally {
             setLoading(false);
             setRefreshing(false);
         }
-    }, []);
+    }, [setClassesData]);
 
     useEffect(() => { load(); }, [load]);
 
@@ -63,14 +66,26 @@ export default function HomeScreen() {
 
     const listData: ListItem[] = React.useMemo(() => {
         if (loading) return [{ type: 'header' }, { type: 'hero' }];
-        const rows = pairItems(classes);
+
+        // We use cachedClasses directly, since setClassesData updates it.
+        // If data is empty, we show empty state instead of crashing.
+        if (!cachedClasses || cachedClasses.length === 0) {
+            return [
+                { type: 'header' },
+                { type: 'hero' },
+                { type: 'section', count: 0 }, // Show 0 classes if empty
+            ];
+        }
+
+        const sortedClasses = [...cachedClasses].sort((a, b) => a.start_time.localeCompare(b.start_time));
+        const rows = pairItems(sortedClasses);
         return [
             { type: 'header' },
             { type: 'hero' },
-            { type: 'section', count: classes.length },
+            { type: 'section', count: sortedClasses.length },
             ...rows.map((items) => ({ type: 'row' as const, items })),
         ];
-    }, [classes, loading]);
+    }, [cachedClasses, loading]);
 
     const renderItem: ListRenderItem<ListItem> = ({ item }) => {
         if (item.type === 'header') {
@@ -115,7 +130,7 @@ export default function HomeScreen() {
                                     instructor={cls.instructor}
                                     instructorAvatar={cls.instructor_avatar ?? ''}
                                     capacity={cls.capacity}
-                                    attendeeCount={counts[cls.id] ?? 0}
+                                    attendeeCount={cachedCounts[cls.id] ?? 0}
                                     onPress={() => router.push(`/class/${cls.id}`)}
                                 />
                             </View>

@@ -12,6 +12,11 @@ jest.mock('@expo-google-fonts/geist', () => ({
     Geist_900Black: null,
 }));
 
+jest.mock('@expo/vector-icons', () => {
+    const { Text } = require('react-native');
+    return { Feather: ({ name, style }: any) => <Text style={style}>{name}</Text> };
+});
+
 jest.mock('../components/Text', () => {
     const { Text } = require('react-native');
     return { Text: ({ children, style }: any) => <Text style={style}>{children}</Text> };

@@ -22,23 +22,21 @@ File-based routing with Expo Router (v3), a thin Supabase API layer (`lib/api.ts
 ## Design Decisions
 
 - **Supabase over local JSON**: started with local JSON for speed, then migrated to Supabase so check-ins persist across sessions and multiple kiosk devices see the same state.
-- **No global state manager**: Zustand was initially used for in-memory check-ins, removed once Supabase made it redundant. Each screen queries what it needs — simpler and easier to reason about.
+- **Offline-First Caching**: `Zustand` and `AsyncStorage` provide a Stale-While-Revalidate pattern. The app reads from cache instantly so it never shows a white screen, even without internet, while syncing with Supabase in the background.
+- **Single Day View**: The home screen queries Supabase strictly for "today's" classes (`gte`/`lt` on `start_time`), ensuring the kiosk is always relevant to the current day.
 - **`CommonActions.reset` for navigation**: after a check-in, the entire stack is cleared and reset to Home. Using `router.replace('/')` only replaced the top screen, leaving class/search screens stacked underneath — not right for a kiosk.
 - **`Animated` over Moti**: Moti was incompatible with the target SDK version. The built-in `Animated` API covers the use case (spring scale + fade) with zero extra dependencies.
 
 ## Trade-offs
 
 - **RLS policies are permissive (dev mode)**: all tables allow public reads and check-in inserts via the anon key. For production, policies should be scoped to authenticated users or a service-level API.
-- **No offline support**: the app requires an internet connection to fetch data. A local cache (e.g. AsyncStorage) could improve resilience.
-- **Single day view**: classes are not filtered by date. For a real deployment, the schedule would need date-aware queries.
 
 ## Future Improvements
 
 - Role-based auth for instructors (manage classes, view history)
 - Real-time attendee list updates with Supabase Realtime subscriptions
-- Date-based class filtering
 - QR code scan for member check-in
-- Offline mode with background sync
+- Background sync for check-ins submitted while offline
 
 ## Running the App
 

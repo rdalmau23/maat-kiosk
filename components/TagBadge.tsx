@@ -11,7 +11,6 @@ const disciplineLabels: Record<string, string> = {
     mma: 'MMA',
     kids: 'KIDS',
     grappling: 'GRAPPLING',
-    crossfit: 'CROSSFIT',
     wrestling: 'WRESTLING',
     kickboxing: 'KICKBOXING',
 };

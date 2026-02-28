@@ -9,12 +9,13 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, router, useFocusEffect } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { Text } from '@/components/Text';
 import { Colors, Spacing, Typography, Radii } from '@/constants/theme';
 import { MemberRow, MemberStatus } from '@/components/MemberRow';
 import { TagBadge } from '@/components/TagBadge';
+import { formatTime } from '@/utils/formatTime';
 import {
     fetchClass,
     fetchClassAttendees,
@@ -23,6 +24,7 @@ import {
     type Attendee,
     type CheckIn,
 } from '@/lib/api';
+import { useCacheStore } from '@/store/useCacheStore';
 
 type AttendeeRow = {
     memberId: string;
@@ -35,9 +37,12 @@ type AttendeeRow = {
 
 export default function ClassScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
-    const [cls, setCls] = useState<Class | null>(null);
+    const { classes } = useCacheStore();
+    const cachedCls = classes.find((c) => c.id === id) ?? null;
+
+    const [cls, setCls] = useState<Class | null>(cachedCls);
     const [attendees, setAttendees] = useState<AttendeeRow[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(cachedCls === null);
 
     const load = useCallback(async () => {
         if (!id) return;
@@ -50,9 +55,16 @@ export default function ClassScreen() {
             setCls(classData);
 
             // Merge: check-ins first (most recent), then pre-registered attendees
-            const checkedInIds = new Set(checkInData.map((ci) => ci.member_id));
+            const checkedInIds = new Set<string>();
+            const uniqueCheckIns = [];
+            for (const ci of checkInData) {
+                if (!checkedInIds.has(ci.member_id)) {
+                    checkedInIds.add(ci.member_id);
+                    uniqueCheckIns.push(ci);
+                }
+            }
 
-            const checkInRows: AttendeeRow[] = checkInData.map((ci) => ({
+            const checkInRows: AttendeeRow[] = uniqueCheckIns.map((ci) => ({
                 memberId: ci.member_id,
                 status: 'checked-in' as MemberStatus,
                 registeredAt: ci.checked_in_at,
@@ -72,7 +84,13 @@ export default function ClassScreen() {
                     profilePicture: (a as any).member?.profile_picture ?? undefined,
                 }));
 
-            setAttendees([...checkInRows, ...attendeeRows]);
+            const combined = [...checkInRows, ...attendeeRows];
+            const seen = new Set<string>();
+            setAttendees(combined.filter((a) => {
+                if (seen.has(a.memberId)) return false;
+                seen.add(a.memberId);
+                return true;
+            }));
         } catch (e) {
             console.error('Failed to load class:', e);
         } finally {
@@ -80,8 +98,12 @@ export default function ClassScreen() {
         }
     }, [id]);
 
-    // Reload when navigating back (after check-in)
-    useEffect(() => { load(); }, [load]);
+    // Reload when navigating back (after check-in/cancel)
+    useFocusEffect(
+        useCallback(() => {
+            load();
+        }, [load])
+    );
 
     type ListItem =
         | { type: 'header' }
@@ -103,7 +125,7 @@ export default function ClassScreen() {
                     <Text style={styles.className}>{cls.name}</Text>
                     <View style={styles.metaRow}>
                         <Feather name="clock" size={14} color={Colors.textSecondary} />
-                        <Text style={styles.metaText}>{cls.start_time} – {cls.end_time}</Text>
+                        <Text style={styles.metaText}>{formatTime(cls.start_time)} – {formatTime(cls.end_time)}</Text>
                         <Feather name="user" size={14} color={Colors.textSecondary} />
                         <Text style={styles.metaText}>{cls.instructor}</Text>
                     </View>
@@ -118,7 +140,7 @@ export default function ClassScreen() {
             );
         }
         if (item.type === 'attendee') {
-            const canCheckIn = item.status !== 'checked-in';
+            const isCheckedIn = item.status === 'checked-in';
             return (
                 <MemberRow
                     firstName={item.firstName}
@@ -126,15 +148,16 @@ export default function ClassScreen() {
                     profilePicture={item.profilePicture}
                     status={item.status}
                     registeredAt={item.registeredAt}
-                    showChevron={canCheckIn}
-                    onPress={canCheckIn ? () => router.push({
+                    showChevron={true}
+                    onPress={() => router.push({
                         pathname: `/class/${id}/checkin`,
                         params: {
                             memberId: item.memberId,
                             memberName: `${item.firstName} ${item.lastName}`,
                             memberAvatar: item.profilePicture ?? '',
+                            isCheckedIn: isCheckedIn ? 'true' : 'false',
                         },
-                    }) : undefined}
+                    })}
                 />
             );
         }

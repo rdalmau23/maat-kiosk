@@ -7,17 +7,19 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { Text } from '@/components/Text';
 import { Colors, Spacing, Typography, Radii } from '@/constants/theme';
 import { SearchBar } from '@/components/SearchBar';
 import { MemberRow, type MemberStatus } from '@/components/MemberRow';
 import { fetchMembers, fetchCheckIns, fetchClassAttendees, type Member } from '@/lib/api';
+import { useCacheStore } from '@/store/useCacheStore';
 
 export default function SearchScreen() {
     const { id: classId } = useLocalSearchParams<{ id: string }>();
-    const [members, setMembers] = useState<Member[]>([]);
+    const { members: cachedMembers, setMembers: setCachedMembers } = useCacheStore();
+    const [members, setLocalMembers] = useState<Member[]>(cachedMembers);
     const [checkedInIds, setCheckedInIds] = useState<Set<string>>(new Set());
     const [attendeeStatus, setAttendeeStatus] = useState<Record<string, MemberStatus>>({});
     const [query, setQuery] = useState('');
@@ -31,7 +33,8 @@ export default function SearchScreen() {
                 fetchCheckIns(classId),
                 fetchClassAttendees(classId),
             ]);
-            setMembers(allMembers);
+            setCachedMembers(allMembers);
+            setLocalMembers(allMembers);
             setCheckedInIds(new Set(checkIns.map((ci) => ci.member_id)));
             // Map member_id → their status for this class
             const statusMap: Record<string, MemberStatus> = {};
@@ -44,7 +47,11 @@ export default function SearchScreen() {
         }
     }, [classId]);
 
-    useEffect(() => { load(); }, [load]);
+    useFocusEffect(
+        useCallback(() => {
+            load();
+        }, [load])
+    );
 
     const filtered = query.trim()
         ? members.filter((m) =>
@@ -53,12 +60,14 @@ export default function SearchScreen() {
         : members;
 
     const handleSelect = (member: Member) => {
+        const isCheckedIn = checkedInIds.has(member.id);
         router.push({
             pathname: `/class/${classId}/checkin`,
             params: {
                 memberId: member.id,
                 memberName: `${member.first_name} ${member.last_name}`,
                 memberAvatar: member.profile_picture ?? '',
+                isCheckedIn: isCheckedIn ? 'true' : 'false',
             },
         });
     };
@@ -110,6 +119,7 @@ export default function SearchScreen() {
                                 lastName={item.last_name}
                                 profilePicture={item.profile_picture ?? undefined}
                                 status={status}
+                                showChevron={true}
                             />
                         </TouchableOpacity>
                     );
