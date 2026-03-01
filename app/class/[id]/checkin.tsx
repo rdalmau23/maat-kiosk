@@ -12,21 +12,29 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { Text } from '@/components/Text';
 import { Colors, Spacing, Typography, Radii, Shadow } from '@/constants/theme';
-import { fetchClass, insertCheckIn, deleteCheckIn } from '@/lib/api';
+import { fetchClass, insertCheckIn, deleteCheckIn, insertAttendee, deleteAttendee, fetchClassCheckInCount } from '@/lib/api';
+import { useAuthStore } from '@/store/useAuthStore';
+import i18n from '@/lib/i18n';
 
 export default function CheckInScreen() {
-    const { id: classId, memberId, memberName, memberAvatar, isCheckedIn } =
+    const { profile } = useAuthStore();
+    const isCoachOrAdmin = profile?.role === 'admin' || profile?.role === 'coach';
+
+    const { id: classId, memberId, memberName, memberAvatar, isCheckedIn, isRegistered } =
         useLocalSearchParams<{
             id: string;
             memberId: string;
             memberName: string;
             memberAvatar: string;
             isCheckedIn?: string;
+            isRegistered?: string;
         }>();
 
     const isAlreadyCheckedIn = isCheckedIn === 'true';
+    const isAlreadyRegistered = isRegistered === 'true';
 
     const [className, setClassName] = useState('');
+    const [classCapacity, setClassCapacity] = useState(0);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
 
@@ -34,28 +42,45 @@ export default function CheckInScreen() {
         if (!classId) return;
         const cls = await fetchClass(classId);
         setClassName(cls?.name ?? '');
+        setClassCapacity(cls?.capacity ?? 0);
         setLoading(false);
     }, [classId]);
 
     useEffect(() => { load(); }, [load]);
 
-    const handleCheckIn = async () => {
+    const handleAction = async (type: 'register' | 'unregister' | 'checkin' | 'uncheckin') => {
         if (!classId || !memberId || submitting) return;
+
         setSubmitting(true);
         try {
-            if (isAlreadyCheckedIn) {
-                await deleteCheckIn(classId, memberId);
-                router.back();
-            } else {
+            if (type === 'checkin') {
+                const currentCount = await fetchClassCheckInCount(classId);
+                if (currentCount >= classCapacity) {
+                    Alert.alert(i18n.t('class.capacity_full'), i18n.t('checkin.class_full_msg'));
+                    setSubmitting(false);
+                    return;
+                }
                 await insertCheckIn(classId, memberId);
                 router.replace({
                     pathname: '/success',
                     params: { memberName, className, classId },
                 });
+            } else if (type === 'uncheckin') {
+                await deleteCheckIn(classId, memberId);
+                router.back();
+            } else if (type === 'register') {
+                await insertAttendee(classId, memberId);
+                router.replace({
+                    pathname: '/success',
+                    params: { memberName, className, classId, isRegistration: 'true' },
+                });
+            } else if (type === 'unregister') {
+                await deleteAttendee(classId, memberId);
+                router.back();
             }
         } catch (e: any) {
             setSubmitting(false);
-            Alert.alert('Action failed', e?.message ?? 'Please try again.');
+            Alert.alert(i18n.t('checkin.error'), e?.message ?? i18n.t('checkin.try_again'));
         }
     };
 
@@ -80,7 +105,11 @@ export default function CheckInScreen() {
                 <TouchableOpacity onPress={() => router.back()} style={styles.closeBtn}>
                     <Feather name="x" size={22} color={Colors.text} />
                 </TouchableOpacity>
-                <Text style={styles.topTitle}>{isAlreadyCheckedIn ? 'Cancel Check-In' : 'Confirm Check-In'}</Text>
+                <Text style={styles.topTitle}>
+                    {isCoachOrAdmin
+                        ? (isAlreadyCheckedIn ? i18n.t('checkin.cancel_checkin') : i18n.t('checkin.confirm_checkin'))
+                        : (isAlreadyRegistered ? i18n.t('checkin.cancel_registration') : i18n.t('checkin.register'))}
+                </Text>
                 <View style={{ width: 38 }} />
             </View>
 
@@ -103,27 +132,91 @@ export default function CheckInScreen() {
 
             {/* CTA */}
             <View style={styles.footer}>
-                <TouchableOpacity
-                    style={[
-                        styles.checkInBtn,
-                        isAlreadyCheckedIn && styles.cancelBtn,
-                        submitting && styles.checkInBtnDisabled
-                    ]}
-                    onPress={handleCheckIn}
-                    activeOpacity={0.85}
-                    disabled={submitting}
-                >
-                    {submitting ? (
-                        <ActivityIndicator color={isAlreadyCheckedIn ? Colors.error : "#fff"} />
-                    ) : (
-                        <>
-                            <Feather name={isAlreadyCheckedIn ? "x" : "check"} size={22} color={isAlreadyCheckedIn ? Colors.error : "#fff"} />
-                            <Text style={[styles.checkInText, isAlreadyCheckedIn && styles.cancelText]}>
-                                {isAlreadyCheckedIn ? 'Cancel Check-in' : 'Check In'}
-                            </Text>
-                        </>
-                    )}
-                </TouchableOpacity>
+                {isCoachOrAdmin ? (
+                    // COACH SINGLE BUTTON
+                    <TouchableOpacity
+                        style={[styles.checkInBtn, isAlreadyCheckedIn && styles.cancelBtn, submitting && styles.checkInBtnDisabled]}
+                        onPress={() => handleAction(isAlreadyCheckedIn ? 'uncheckin' : 'checkin')}
+                        activeOpacity={0.85}
+                        disabled={submitting}
+                    >
+                        {submitting ? <ActivityIndicator color={isAlreadyCheckedIn ? Colors.error : "#fff"} /> : (
+                            <>
+                                <Feather name={isAlreadyCheckedIn ? "x" : "check"} size={22} color={isAlreadyCheckedIn ? Colors.error : "#fff"} />
+                                <Text style={[styles.checkInText, isAlreadyCheckedIn && styles.cancelText]}>
+                                    {isAlreadyCheckedIn ? i18n.t('checkin.cancel_checkin') : i18n.t('checkin.confirm_checkin')}
+                                </Text>
+                            </>
+                        )}
+                    </TouchableOpacity>
+                ) : (
+                    // MEMBER BUTTONS
+                    <View style={{ gap: Spacing.md, width: '100%' }}>
+                        {!isAlreadyRegistered && !isAlreadyCheckedIn ? (
+                            <TouchableOpacity
+                                style={[styles.checkInBtn, submitting && styles.checkInBtnDisabled]}
+                                onPress={() => handleAction('register')}
+                                activeOpacity={0.85}
+                                disabled={submitting}
+                            >
+                                {submitting ? <ActivityIndicator color="#fff" /> : (
+                                    <>
+                                        <Feather name="calendar" size={22} color="#fff" />
+                                        <Text style={styles.checkInText}>{i18n.t('checkin.register')}</Text>
+                                    </>
+                                )}
+                            </TouchableOpacity>
+                        ) : null}
+
+                        {isAlreadyRegistered && !isAlreadyCheckedIn ? (
+                            <>
+                                <TouchableOpacity
+                                    style={[styles.checkInBtn, submitting && styles.checkInBtnDisabled, { backgroundColor: Colors.success }]}
+                                    onPress={() => handleAction('checkin')}
+                                    activeOpacity={0.85}
+                                    disabled={submitting}
+                                >
+                                    {submitting ? <ActivityIndicator color="#fff" /> : (
+                                        <>
+                                            <Feather name="check-circle" size={22} color="#fff" />
+                                            <Text style={styles.checkInText}>{i18n.t('class.confirm_attendance')}</Text>
+                                        </>
+                                    )}
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={[styles.checkInBtn, styles.cancelBtn, submitting && styles.checkInBtnDisabled]}
+                                    onPress={() => handleAction('unregister')}
+                                    activeOpacity={0.85}
+                                    disabled={submitting}
+                                >
+                                    {submitting ? <ActivityIndicator color={Colors.error} /> : (
+                                        <>
+                                            <Feather name="x" size={22} color={Colors.error} />
+                                            <Text style={[styles.checkInText, styles.cancelText]}>{i18n.t('checkin.cancel_registration')}</Text>
+                                        </>
+                                    )}
+                                </TouchableOpacity>
+                            </>
+                        ) : null}
+
+                        {isAlreadyCheckedIn ? (
+                            <TouchableOpacity
+                                style={[styles.checkInBtn, styles.cancelBtn, submitting && styles.checkInBtnDisabled]}
+                                onPress={() => handleAction('uncheckin')}
+                                activeOpacity={0.85}
+                                disabled={submitting}
+                            >
+                                {submitting ? <ActivityIndicator color={Colors.error} /> : (
+                                    <>
+                                        <Feather name="x-circle" size={22} color={Colors.error} />
+                                        <Text style={[styles.checkInText, styles.cancelText]}>{i18n.t('checkin.cancel_attendance')}</Text>
+                                    </>
+                                )}
+                            </TouchableOpacity>
+                        ) : null}
+                    </View>
+                )}
             </View>
         </SafeAreaView>
     );

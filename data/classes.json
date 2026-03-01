@@ -5,8 +5,6 @@
         "discipline": "bjj",
         "startTime": "07:00",
         "endTime": "08:30",
-        "instructor": "Lautaro S.",
-        "instructorAvatar": "https://randomuser.me/api/portraits/men/33.jpg",
         "capacity": 30,
         "bannerImage": "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=800&q=80",
         "attendees": [
@@ -35,7 +33,8 @@
                 "status": "registered",
                 "registeredAt": "07:20"
             }
-        ]
+        ],
+        "instructorId": "1"
     },
     {
         "id": "c2",
@@ -43,8 +42,6 @@
         "discipline": "wrestling",
         "startTime": "08:00",
         "endTime": "09:30",
-        "instructor": "Noah B.",
-        "instructorAvatar": "https://randomuser.me/api/portraits/men/36.jpg",
         "capacity": 20,
         "bannerImage": "https://images.unsplash.com/photo-1547153760-18fc86324498?w=800&q=80",
         "attendees": [
@@ -73,7 +70,8 @@
                 "status": "registered",
                 "registeredAt": "08:20"
             }
-        ]
+        ],
+        "instructorId": "2"
     },
     {
         "id": "c3",
@@ -81,8 +79,6 @@
         "discipline": "kids",
         "startTime": "09:00",
         "endTime": "10:00",
-        "instructor": "Marco L.",
-        "instructorAvatar": "https://randomuser.me/api/portraits/men/34.jpg",
         "capacity": 15,
         "bannerImage": "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80",
         "attendees": [
@@ -101,7 +97,8 @@
                 "status": "registered",
                 "registeredAt": "09:10"
             }
-        ]
+        ],
+        "instructorId": "3"
     },
     {
         "id": "c4",
@@ -109,8 +106,6 @@
         "discipline": "mma",
         "startTime": "10:00",
         "endTime": "11:30",
-        "instructor": "Carlos F.",
-        "instructorAvatar": "https://randomuser.me/api/portraits/men/35.jpg",
         "capacity": 25,
         "bannerImage": "https://images.unsplash.com/photo-1591117207239-788bf8de6c3b?w=800&q=80",
         "attendees": [
@@ -144,7 +139,8 @@
                 "status": "confirmed",
                 "registeredAt": "10:25"
             }
-        ]
+        ],
+        "instructorId": "4"
     },
     {
         "id": "c5",
@@ -152,8 +148,6 @@
         "discipline": "grappling",
         "startTime": "11:00",
         "endTime": "13:00",
-        "instructor": "Lautaro S.",
-        "instructorAvatar": "https://randomuser.me/api/portraits/men/33.jpg",
         "capacity": 40,
         "bannerImage": "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&q=80",
         "attendees": [
@@ -172,7 +166,8 @@
                 "status": "confirmed",
                 "registeredAt": "11:20"
             }
-        ]
+        ],
+        "instructorId": "1"
     },
     {
         "id": "c6",
@@ -180,8 +175,6 @@
         "discipline": "mma",
         "startTime": "12:00",
         "endTime": "13:00",
-        "instructor": "Noah B.",
-        "instructorAvatar": "https://randomuser.me/api/portraits/men/36.jpg",
         "capacity": 20,
         "bannerImage": "https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=800&q=80",
         "attendees": [
@@ -195,7 +188,8 @@
                 "status": "registered",
                 "registeredAt": "12:05"
             }
-        ]
+        ],
+        "instructorId": "2"
     },
     {
         "id": "c7",
@@ -203,8 +197,6 @@
         "discipline": "kickboxing",
         "startTime": "16:00",
         "endTime": "17:00",
-        "instructor": "Carlos F.",
-        "instructorAvatar": "https://randomuser.me/api/portraits/men/35.jpg",
         "capacity": 20,
         "bannerImage": "https://images.unsplash.com/photo-1615117950638-2e3f8b5a7b8d?w=800&q=80",
         "attendees": [
@@ -228,7 +220,8 @@
                 "status": "registered",
                 "registeredAt": "16:15"
             }
-        ]
+        ],
+        "instructorId": "4"
     },
     {
         "id": "c8",
@@ -236,8 +229,6 @@
         "discipline": "bjj",
         "startTime": "18:00",
         "endTime": "19:30",
-        "instructor": "Lautaro S.",
-        "instructorAvatar": "https://randomuser.me/api/portraits/men/33.jpg",
         "capacity": 30,
         "bannerImage": "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=800&q=80",
         "attendees": [
@@ -276,6 +267,7 @@
                 "status": "registered",
                 "registeredAt": "18:30"
             }
-        ]
+        ],
+        "instructorId": "1"
     }
 ]

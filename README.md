@@ -11,6 +11,8 @@
 
 File-based routing with Expo Router (v3), a thin Supabase API layer (`lib/api.ts`) for all data access, and React's built-in `Animated` API for UI transitions. Each screen is self-contained: it fetches its own data on mount and writes directly to Supabase on user action.
 
+![DB Diagram](image.png)
+
 ## Tech Stack
 
 - **Platform**: React Native (Expo SDK 54)

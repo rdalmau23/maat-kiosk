@@ -3,144 +3,192 @@
         "id": "1",
         "firstName": "Ffion",
         "lastName": "Davies",
-        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/1/18/Ffion_Davies_OF_02.jpg"
+        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/1/18/Ffion_Davies_OF_02.jpg",
+        "email": "ffion.davies@example.com",
+        "role": "admin"
     },
     {
         "id": "2",
         "firstName": "Mikey",
         "lastName": "Musumeci",
-        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Mikey_Musumeci_2022.jpg/500px-Mikey_Musumeci_2022.jpg"
+        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Mikey_Musumeci_2022.jpg/500px-Mikey_Musumeci_2022.jpg",
+        "email": "mikey.musumeci@example.com",
+        "role": "coach"
     },
     {
         "id": "3",
         "firstName": "Mayssa",
         "lastName": "Bastos",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "mayssa.bastos@example.com",
+        "role": "coach"
     },
     {
         "id": "4",
         "firstName": "Marcelo",
         "lastName": "Garcia",
-        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Marcelo_garcia.jpg/500px-Marcelo_garcia.jpg"
+        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Marcelo_garcia.jpg/500px-Marcelo_garcia.jpg",
+        "email": "marcelo.garcia@example.com",
+        "role": "coach"
     },
     {
         "id": "5",
         "firstName": "Bia",
         "lastName": "Mesquita",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "bia.mesquita@example.com",
+        "role": "coach"
     },
     {
         "id": "6",
         "firstName": "Craig",
         "lastName": "Jones",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "craig.jones@example.com",
+        "role": "coach"
     },
     {
         "id": "7",
         "firstName": "Mackenzie",
         "lastName": "Dern",
-        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/4/40/Mackenzie_Dern.png"
+        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/4/40/Mackenzie_Dern.png",
+        "email": "mackenzie.dern@example.com",
+        "role": "coach"
     },
     {
         "id": "8",
         "firstName": "Gordon",
         "lastName": "Ryan",
-        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/ADCC_King_Gordon_Ryan_Gritty_Path_To_Glory_-_YouTube_-_10_12_%28cropped%29.jpg/500px-ADCC_King_Gordon_Ryan_Gritty_Path_To_Glory_-_YouTube_-_10_12_%28cropped%29.jpg"
+        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/ADCC_King_Gordon_Ryan_Gritty_Path_To_Glory_-_YouTube_-_10_12_%28cropped%29.jpg/500px-ADCC_King_Gordon_Ryan_Gritty_Path_To_Glory_-_YouTube_-_10_12_%28cropped%29.jpg",
+        "email": "gordon.ryan@example.com",
+        "role": "coach"
     },
     {
         "id": "9",
         "firstName": "Gabi",
         "lastName": "Garcia",
-        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Gabi_Garcia.png/500px-Gabi_Garcia.png"
+        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Gabi_Garcia.png/500px-Gabi_Garcia.png",
+        "email": "gabi.garcia@example.com",
+        "role": "member"
     },
     {
         "id": "10",
         "firstName": "Kade",
         "lastName": "Ruotolo",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "kade.ruotolo@example.com",
+        "role": "member"
     },
     {
         "id": "11",
         "firstName": "Luiza",
         "lastName": "Monteiro",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "luiza.monteiro@example.com",
+        "role": "member"
     },
     {
         "id": "12",
         "firstName": "Tye",
         "lastName": "Ruotolo",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "tye.ruotolo@example.com",
+        "role": "member"
     },
     {
         "id": "13",
         "firstName": "Michelle",
         "lastName": "Nicolini",
-        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/AFG_Interview_%2B_Highlights_%E2%80%93_Michelle_Nicolini_2016_-_YouTube_-_1_56_%28cropped%29.jpg/500px-AFG_Interview_%2B_Highlights_%E2%80%93_Michelle_Nicolini_2016_-_YouTube_-_1_56_%28cropped%29.jpg"
+        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/AFG_Interview_%2B_Highlights_%E2%80%93_Michelle_Nicolini_2016_-_YouTube_-_1_56_%28cropped%29.jpg/500px-AFG_Interview_%2B_Highlights_%E2%80%93_Michelle_Nicolini_2016_-_YouTube_-_1_56_%28cropped%29.jpg",
+        "email": "michelle.nicolini@example.com",
+        "role": "member"
     },
     {
         "id": "14",
         "firstName": "Leandro",
         "lastName": "Lo",
-        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/2/20/Leandro_Lo_Worlds_IBJJF_2022.jpg"
+        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/2/20/Leandro_Lo_Worlds_IBJJF_2022.jpg",
+        "email": "leandro.lo@example.com",
+        "role": "member"
     },
     {
         "id": "15",
         "firstName": "Gezary",
         "lastName": "Matuda",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "gezary.matuda@example.com",
+        "role": "member"
     },
     {
         "id": "16",
         "firstName": "Marcus",
         "lastName": "Buchecha",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "marcus.buchecha@example.com",
+        "role": "member"
     },
     {
         "id": "17",
         "firstName": "Rikako",
         "lastName": "Yuasa",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "rikako.yuasa@example.com",
+        "role": "member"
     },
     {
         "id": "18",
         "firstName": "Andre",
         "lastName": "Galvao",
-        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Andrea_Galvao.jpg/500px-Andrea_Galvao.jpg"
+        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Andrea_Galvao.jpg/500px-Andrea_Galvao.jpg",
+        "email": "andre.galvao@example.com",
+        "role": "member"
     },
     {
         "id": "19",
         "firstName": "Kendall",
         "lastName": "Reusing",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "kendall.reusing@example.com",
+        "role": "member"
     },
     {
         "id": "20",
         "firstName": "Mica",
         "lastName": "Galvao",
-        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Vlog-6_FINALIZOU_EM_1_MINUTO%21%21%21_Veja_s%C3%B3%21_-_YouTube_-_13-49_%28cropped%29.jpg/500px-Vlog-6_FINALIZOU_EM_1_MINUTO%21%21%21_Veja_s%C3%B3%21_-_YouTube_-_13-49_%28cropped%29.jpg"
+        "profilePicture": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Vlog-6_FINALIZOU_EM_1_MINUTO%21%21%21_Veja_s%C3%B3%21_-_YouTube_-_13-49_%28cropped%29.jpg/500px-Vlog-6_FINALIZOU_EM_1_MINUTO%21%21%21_Veja_s%C3%B3%21_-_YouTube_-_13-49_%28cropped%29.jpg",
+        "email": "mica.galvao@example.com",
+        "role": "member"
     },
     {
         "id": "21",
         "firstName": "Elisabeth",
         "lastName": "Clay",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "elisabeth.clay@example.com",
+        "role": "member"
     },
     {
         "id": "22",
         "firstName": "Nicholas",
         "lastName": "Meregali",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "nicholas.meregali@example.com",
+        "role": "member"
     },
     {
         "id": "23",
         "firstName": "Tammi",
         "lastName": "Musumeci",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "tammi.musumeci@example.com",
+        "role": "member"
     },
     {
         "id": "24",
         "firstName": "Felipe",
         "lastName": "Pena",
-        "profilePicture": ""
+        "profilePicture": "",
+        "email": "felipe.pena@example.com",
+        "role": "member"
     }
 ]

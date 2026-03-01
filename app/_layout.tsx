@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Stack, useSegments, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
@@ -11,6 +11,7 @@ import {
     Geist_900Black,
 } from '@expo-google-fonts/geist';
 import { Colors } from '@/constants/theme';
+import { useAuthStore } from '@/store/useAuthStore';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,11 +24,35 @@ export default function RootLayout() {
         Geist_900Black,
     });
 
-    useEffect(() => {
-        if (fontsLoaded) SplashScreen.hideAsync();
-    }, [fontsLoaded]);
+    const { session, initialized, initialize } = useAuthStore();
+    const segments = useSegments();
+    const router = useRouter();
 
-    if (!fontsLoaded) return null;
+    useEffect(() => {
+        initialize();
+    }, []);
+
+    useEffect(() => {
+        if (fontsLoaded && initialized) {
+            SplashScreen.hideAsync();
+        }
+    }, [fontsLoaded, initialized]);
+
+    useEffect(() => {
+        if (!initialized || !fontsLoaded) return;
+
+        const inAuthGroup = segments[0] === 'login';
+
+        if (!session && !inAuthGroup) {
+            // Redirect to the login page.
+            router.replace('/login');
+        } else if (session && inAuthGroup) {
+            // Redirect away from the login page.
+            router.replace('/');
+        }
+    }, [session, initialized, segments, fontsLoaded]);
+
+    if (!fontsLoaded || !initialized) return null;
 
     return (
         <>
@@ -39,7 +64,9 @@ export default function RootLayout() {
                     animation: 'slide_from_right',
                 }}
             >
+                <Stack.Screen name="login" options={{ animation: 'fade' }} />
                 <Stack.Screen name="index" />
+                <Stack.Screen name="profile" options={{ presentation: 'modal' }} />
                 <Stack.Screen name="class/[id]" />
                 <Stack.Screen
                     name="class/[id]/search"

@@ -10,11 +10,14 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Text } from '@/components/Text';
-import { Colors, Spacing, Typography } from '@/constants/theme';
+import { Colors, Spacing, Typography, Radii } from '@/constants/theme';
 import { ClassCard } from '@/components/ClassCard';
 import { HeroBanner } from '@/components/HeroBanner';
 import { fetchClasses, fetchAttendeeCounts, type Class } from '@/lib/api';
 import { useCacheStore } from '@/store/useCacheStore';
+import { useAuthStore } from '@/store/useAuthStore';
+import i18n from '@/lib/i18n';
+import { Image, TouchableOpacity } from 'react-native';
 
 function pairItems<T>(items: T[]): (T | null)[][] {
     const rows: (T | null)[][] = [];
@@ -31,8 +34,8 @@ type ListItem =
     | { type: 'row'; items: (Class | null)[] };
 
 export default function HomeScreen() {
-    // Read from cache first (instant loading, works offline)
     const { classes: cachedClasses, counts: cachedCounts, setClassesData } = useCacheStore();
+    const { profile } = useAuthStore();
 
     // Determine initial loading state: if we have cache, we don't need to block the UI
     const [loading, setLoading] = useState(cachedClasses.length === 0);
@@ -67,7 +70,6 @@ export default function HomeScreen() {
     const listData: ListItem[] = React.useMemo(() => {
         if (loading) return [{ type: 'header' }, { type: 'hero' }];
 
-        // We use cachedClasses directly, since setClassesData updates it.
         // If data is empty, we show empty state instead of crashing.
         if (!cachedClasses || cachedClasses.length === 0) {
             return [
@@ -91,8 +93,21 @@ export default function HomeScreen() {
         if (item.type === 'header') {
             return (
                 <View style={styles.headerContainer}>
-                    <Text style={styles.dateText}>{today}</Text>
-                    <Text style={styles.welcomeTitle}>Welcome to MAAT</Text>
+                    <View style={styles.headerTextGroup}>
+                        <Text style={styles.dateText}>{today}</Text>
+                        <Text style={styles.welcomeTitle}>{i18n.t('home.welcome')}</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => router.push('/profile')} activeOpacity={0.8}>
+                        {profile?.profile_picture ? (
+                            <Image source={{ uri: profile.profile_picture }} style={styles.headerAvatar} />
+                        ) : (
+                            <View style={styles.headerAvatarPlaceholder}>
+                                <Text style={styles.headerAvatarInitial}>
+                                    {profile?.first_name?.charAt(0) || '?'}
+                                </Text>
+                            </View>
+                        )}
+                    </TouchableOpacity>
                 </View>
             );
         }
@@ -110,8 +125,10 @@ export default function HomeScreen() {
         if (item.type === 'section') {
             return (
                 <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Today's classes</Text>
-                    <Text style={styles.sectionCount}>{item.count} classes</Text>
+                    <Text style={styles.sectionTitle}>{i18n.t('home.classes')}</Text>
+                    <View style={styles.badge}>
+                        <Text style={styles.badgeText}>{item.count}</Text>
+                    </View>
                 </View>
             );
         }
@@ -127,10 +144,10 @@ export default function HomeScreen() {
                                     discipline={cls.discipline}
                                     startTime={cls.start_time}
                                     endTime={cls.end_time}
-                                    instructor={cls.instructor}
-                                    instructorAvatar={cls.instructor_avatar ?? ''}
+                                    instructor={cls.instructor ? `${cls.instructor.first_name} ${cls.instructor.last_name}` : 'Unknown Coach'}
+                                    instructorAvatar={cls.instructor?.profile_picture ?? ''}
                                     capacity={cls.capacity}
-                                    attendeeCount={cachedCounts[cls.id] ?? 0}
+                                    attendeeCount={cachedCounts[cls.id] || 0}
                                     onPress={() => router.push(`/class/${cls.id}`)}
                                 />
                             </View>
@@ -159,10 +176,11 @@ export default function HomeScreen() {
             <FlatList
                 data={listData}
                 renderItem={renderItem}
-                keyExtractor={(_, i) => String(i)}
+                keyExtractor={(_, i) => `item-${i}`}
                 contentContainerStyle={styles.content}
                 showsVerticalScrollIndicator={false}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                ListEmptyComponent={<Text style={styles.emptyText}>{i18n.t('home.no_classes')}</Text>}
                 ListFooterComponent={<View style={{ height: Spacing.xxxl }} />}
             />
         </SafeAreaView>
@@ -173,7 +191,20 @@ const styles = StyleSheet.create({
     safe: { flex: 1, backgroundColor: Colors.background },
     center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
     content: { paddingHorizontal: Spacing.lg },
-    headerContainer: { paddingTop: Spacing.xl, paddingBottom: Spacing.md, gap: Spacing.xs },
+    headerContainer: {
+        paddingTop: Spacing.xl,
+        paddingBottom: Spacing.md,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    headerTextGroup: { gap: Spacing.xs },
+    headerAvatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.surface },
+    headerAvatarPlaceholder: {
+        width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.surface,
+        alignItems: 'center', justifyContent: 'center'
+    },
+    headerAvatarInitial: { fontSize: Typography.lg, fontWeight: Typography.bold, color: Colors.textMuted },
     dateText: { fontSize: Typography.xs, fontWeight: Typography.semibold, color: Colors.textMuted, letterSpacing: 0.8 },
     welcomeTitle: { fontSize: Typography.xxl, fontWeight: Typography.heavy, color: Colors.text },
     heroPadding: { marginBottom: Spacing.xl },
@@ -182,4 +213,21 @@ const styles = StyleSheet.create({
     sectionCount: { fontSize: Typography.sm, color: Colors.textMuted },
     row: { flexDirection: 'row', gap: Spacing.md, marginBottom: Spacing.md },
     cardWrapper: { flex: 1 },
+    emptyText: {
+        textAlign: 'center',
+        padding: Spacing.xl,
+        color: Colors.textMuted,
+        fontSize: Typography.base,
+    },
+    badge: {
+        backgroundColor: Colors.primary,
+        borderRadius: Radii.full,
+        paddingHorizontal: Spacing.sm,
+        paddingVertical: 2,
+    },
+    badgeText: {
+        color: Colors.primaryForeground,
+        fontSize: Typography.sm,
+        fontWeight: Typography.bold,
+    },
 });

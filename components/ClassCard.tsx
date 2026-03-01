@@ -46,7 +46,13 @@ export function ClassCard({
         >
             {/* Header: avatar + name */}
             <View style={styles.header}>
-                <Image source={{ uri: instructorAvatar }} style={styles.avatar} />
+                {instructorAvatar ? (
+                    <Image source={{ uri: instructorAvatar }} style={styles.avatar} />
+                ) : (
+                    <View style={[styles.avatar, { backgroundColor: Colors.border, alignItems: 'center', justifyContent: 'center' }]}>
+                        <Feather name="user" size={24} color={Colors.textMuted} />
+                    </View>
+                )}
                 <View style={styles.headerText}>
                     <Text style={styles.className} numberOfLines={1}>
                         {name}

@@ -7,6 +7,7 @@ export type Member = {
     first_name: string;
     last_name: string;
     profile_picture: string | null;
+    role: 'admin' | 'coach' | 'member';
 };
 
 export type Class = {
@@ -15,10 +16,10 @@ export type Class = {
     discipline: string;
     start_time: string;
     end_time: string;
-    instructor: string;
-    instructor_avatar: string | null;
+    instructor_id: string;
     capacity: number;
     banner_image: string | null;
+    instructor?: Member;
 };
 
 export type Attendee = {
@@ -46,7 +47,10 @@ export async function fetchClasses(): Promise<Class[]> {
 
     const { data, error } = await supabase
         .from('classes')
-        .select('*')
+        .select(`
+            *,
+            instructor:members!instructor_id(*)
+        `)
         .gte('start_time', `${today}T00:00:00.000Z`)
         .lte('start_time', `${today}T23:59:59.999Z`)
         .order('start_time');
@@ -81,7 +85,10 @@ export async function fetchAttendeeCounts(): Promise<Record<string, number>> {
 export async function fetchClass(id: string): Promise<Class | null> {
     const { data, error } = await supabase
         .from('classes')
-        .select('*')
+        .select(`
+            *,
+            instructor:members!instructor_id(*)
+        `)
         .eq('id', id)
         .single();
     if (error) return null;
@@ -138,6 +145,22 @@ export async function deleteCheckIn(classId: string, memberId: string): Promise<
     if (error) throw error;
 }
 
+export async function insertAttendee(classId: string, memberId: string): Promise<void> {
+    const { error } = await supabase
+        .from('attendees')
+        .upsert({ class_id: classId, member_id: memberId, status: 'registered' }, { onConflict: 'class_id, member_id' });
+    if (error) throw error;
+}
+
+export async function deleteAttendee(classId: string, memberId: string): Promise<void> {
+    const { error } = await supabase
+        .from('attendees')
+        .delete()
+        .eq('class_id', classId)
+        .eq('member_id', memberId);
+    if (error) throw error;
+}
+
 export async function isMemberCheckedIn(classId: string, memberId: string): Promise<boolean> {
     const { count, error } = await supabase
         .from('check_ins')
@@ -146,4 +169,13 @@ export async function isMemberCheckedIn(classId: string, memberId: string): Prom
         .eq('member_id', memberId);
     if (error) return false;
     return (count ?? 0) > 0;
+}
+
+export async function fetchClassCheckInCount(classId: string): Promise<number> {
+    const { count, error } = await supabase
+        .from('check_ins')
+        .select('id', { count: 'exact', head: true })
+        .eq('class_id', classId);
+    if (error) throw error;
+    return count ?? 0;
 }

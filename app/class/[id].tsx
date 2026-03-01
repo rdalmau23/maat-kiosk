@@ -25,6 +25,8 @@ import {
     type CheckIn,
 } from '@/lib/api';
 import { useCacheStore } from '@/store/useCacheStore';
+import { useAuthStore } from '@/store/useAuthStore';
+import i18n from '@/lib/i18n';
 
 type AttendeeRow = {
     memberId: string;
@@ -38,7 +40,10 @@ type AttendeeRow = {
 export default function ClassScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const { classes } = useCacheStore();
+    const { profile } = useAuthStore();
     const cachedCls = classes.find((c) => c.id === id) ?? null;
+
+    const isCoachOrAdmin = profile?.role === 'admin' || profile?.role === 'coach';
 
     const [cls, setCls] = useState<Class | null>(cachedCls);
     const [attendees, setAttendees] = useState<AttendeeRow[]>([]);
@@ -127,20 +132,26 @@ export default function ClassScreen() {
                         <Feather name="clock" size={14} color={Colors.textSecondary} />
                         <Text style={styles.metaText}>{formatTime(cls.start_time)} – {formatTime(cls.end_time)}</Text>
                         <Feather name="user" size={14} color={Colors.textSecondary} />
-                        <Text style={styles.metaText}>{cls.instructor}</Text>
+                        <Text style={styles.metaText}>{cls.instructor ? `${cls.instructor.first_name} ${cls.instructor.last_name}` : 'Unknown'}</Text>
                     </View>
                     <View style={styles.metaRow}>
                         <Feather name="users" size={14} color={Colors.textSecondary} />
-                        <Text style={styles.metaText}>{attendees.length} / {cls.capacity} attendees</Text>
+                        <Text style={styles.metaText}>{attendees.length} / {cls.capacity} {i18n.t('class.attendees')}</Text>
                     </View>
                     <View style={styles.sectionLabel}>
-                        <Text style={styles.sectionTitle}>Attendees</Text>
+                        <Text style={styles.sectionTitle}>{i18n.t('class.instructor')}</Text>
+                    </View>
+                    <View style={styles.sectionLabel}>
+                        <Text style={styles.sectionTitle}>{i18n.t('class.attendees')}</Text>
                     </View>
                 </View>
             );
         }
         if (item.type === 'attendee') {
             const isCheckedIn = item.status === 'checked-in';
+            const isMe = profile?.id === item.memberId;
+            const canEdit = isCoachOrAdmin || isMe;
+
             return (
                 <MemberRow
                     firstName={item.firstName}
@@ -148,16 +159,17 @@ export default function ClassScreen() {
                     profilePicture={item.profilePicture}
                     status={item.status}
                     registeredAt={item.registeredAt}
-                    showChevron={true}
-                    onPress={() => router.push({
+                    showChevron={canEdit}
+                    onPress={canEdit ? () => router.push({
                         pathname: `/class/${id}/checkin`,
                         params: {
                             memberId: item.memberId,
                             memberName: `${item.firstName} ${item.lastName}`,
                             memberAvatar: item.profilePicture ?? '',
                             isCheckedIn: isCheckedIn ? 'true' : 'false',
+                            isRegistered: item.status === 'registered' || item.status === 'checked-in' ? 'true' : 'false',
                         },
-                    })}
+                    }) : undefined}
                 />
             );
         }
@@ -186,8 +198,8 @@ export default function ClassScreen() {
                     hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
                     <Feather name="arrow-left" size={22} color={Colors.text} />
                 </TouchableOpacity>
-                {cls?.instructor_avatar ? (
-                    <Image source={{ uri: cls.instructor_avatar }} style={styles.instrAvatar} />
+                {cls?.instructor?.profile_picture ? (
+                    <Image source={{ uri: cls.instructor.profile_picture }} style={styles.instrAvatar} />
                 ) : null}
             </View>
 
@@ -197,17 +209,67 @@ export default function ClassScreen() {
                 keyExtractor={(item, i) => item.type === 'attendee' ? item.memberId : `header-${i}`}
                 contentContainerStyle={styles.listContent}
                 showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<Text style={styles.emptyText}>No attendees yet.</Text>}
+                ListEmptyComponent={<Text style={styles.emptyText}>{i18n.t('class.no_attendees')}</Text>}
                 ListFooterComponent={<View style={{ height: 100 }} />}
             />
 
-            <View style={styles.fabContainer}>
-                <TouchableOpacity style={styles.fab}
-                    onPress={() => router.push(`/class/${id}/search`)} activeOpacity={0.85}>
-                    <Feather name="user-plus" size={20} color={Colors.primaryForeground} />
-                    <Text style={styles.fabText}>Add Check-In</Text>
-                </TouchableOpacity>
-            </View>
+            {isCoachOrAdmin ? (
+                <View style={styles.fabContainer}>
+                    <TouchableOpacity style={styles.fab}
+                        onPress={() => router.push(`/class/${id}/search`)} activeOpacity={0.85}>
+                        <Feather name="plus" size={20} color={Colors.primaryForeground} />
+                        <Text style={styles.fabText}>{i18n.t('class.add_checkin')}</Text>
+                    </TouchableOpacity>
+                </View>
+            ) : (
+                <View style={styles.fabContainer}>
+                    <TouchableOpacity style={styles.fab}
+                        onPress={() => {
+                            const myRecord = attendees.find(a => a.memberId === profile?.id);
+                            router.push({
+                                pathname: `/class/${id}/checkin`,
+                                params: {
+                                    memberId: profile?.id ?? '',
+                                    memberName: `${profile?.first_name} ${profile?.last_name}`,
+                                    memberAvatar: profile?.profile_picture ?? '',
+                                    isCheckedIn: myRecord?.status === 'checked-in' ? 'true' : 'false',
+                                    isRegistered: myRecord?.status === 'registered' || myRecord?.status === 'checked-in' ? 'true' : 'false',
+                                },
+                            });
+                        }}
+                        activeOpacity={0.85}
+                    >
+                        {(() => {
+                            const myRecord = attendees.find(a => a.memberId === profile?.id);
+                            const isReg = myRecord?.status === 'registered' || myRecord?.status === 'checked-in';
+                            const isCheck = myRecord?.status === 'checked-in';
+
+                            if (isCheck) {
+                                return (
+                                    <>
+                                        <Feather name="check-circle" size={20} color={Colors.primaryForeground} />
+                                        <Text style={styles.fabText}>{i18n.t('class.attendance_confirmed')}</Text>
+                                    </>
+                                );
+                            } else if (isReg) {
+                                return (
+                                    <>
+                                        <Feather name="check" size={20} color={Colors.primaryForeground} />
+                                        <Text style={styles.fabText}>{i18n.t('class.confirm_attendance')}</Text>
+                                    </>
+                                );
+                            } else {
+                                return (
+                                    <>
+                                        <Feather name="calendar" size={20} color={Colors.primaryForeground} />
+                                        <Text style={styles.fabText}>{i18n.t('class.book_class')}</Text>
+                                    </>
+                                );
+                            }
+                        })()}
+                    </TouchableOpacity>
+                </View>
+            )}
         </SafeAreaView>
     );
 }

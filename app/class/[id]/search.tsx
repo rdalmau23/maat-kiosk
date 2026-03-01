@@ -15,15 +15,28 @@ import { SearchBar } from '@/components/SearchBar';
 import { MemberRow, type MemberStatus } from '@/components/MemberRow';
 import { fetchMembers, fetchCheckIns, fetchClassAttendees, type Member } from '@/lib/api';
 import { useCacheStore } from '@/store/useCacheStore';
+import { useAuthStore } from '@/store/useAuthStore';
+import i18n from '@/lib/i18n';
 
 export default function SearchScreen() {
     const { id: classId } = useLocalSearchParams<{ id: string }>();
     const { members: cachedMembers, setMembers: setCachedMembers } = useCacheStore();
+    const { profile } = useAuthStore();
+
+    // Hard block standard members from accessing search
+    const isCoachOrAdmin = profile?.role === 'admin' || profile?.role === 'coach';
+
     const [members, setLocalMembers] = useState<Member[]>(cachedMembers);
     const [checkedInIds, setCheckedInIds] = useState<Set<string>>(new Set());
     const [attendeeStatus, setAttendeeStatus] = useState<Record<string, MemberStatus>>({});
     const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!isCoachOrAdmin) {
+            router.back();
+        }
+    }, [isCoachOrAdmin]);
 
     const load = useCallback(async () => {
         if (!classId) return;
@@ -85,7 +98,7 @@ export default function SearchScreen() {
     return (
         <SafeAreaView style={styles.safe}>
             <View style={styles.header}>
-                <Text style={styles.title}>Find Member</Text>
+                <Text style={styles.title}>{i18n.t('checkin.find_member')}</Text>
                 <TouchableOpacity onPress={() => router.back()} style={styles.closeBtn}>
                     <Feather name="x" size={22} color={Colors.text} />
                 </TouchableOpacity>
@@ -94,7 +107,7 @@ export default function SearchScreen() {
             <SearchBar
                 value={query}
                 onChangeText={setQuery}
-                placeholder="Search by name…"
+                placeholder={i18n.t('checkin.search_placeholder')}
                 autoFocus
             />
 
