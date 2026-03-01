@@ -21,7 +21,7 @@ export const useCacheStore = create<CacheState>()(
             setMembers: (members) => set({ members }),
         }),
         {
-            name: 'maat-kiosk-cache',
+            name: 'maat-kiosk-cache-v1',
             storage: createJSONStorage(() => AsyncStorage),
         }
     )
