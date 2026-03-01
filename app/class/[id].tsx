@@ -213,63 +213,82 @@ export default function ClassScreen() {
                 ListFooterComponent={<View style={{ height: 100 }} />}
             />
 
-            {isCoachOrAdmin ? (
-                <View style={styles.fabContainer}>
-                    <TouchableOpacity style={styles.fab}
-                        onPress={() => router.push(`/class/${id}/search`)} activeOpacity={0.85}>
-                        <Feather name="plus" size={20} color={Colors.primaryForeground} />
-                        <Text style={styles.fabText}>{i18n.t('class.add_checkin')}</Text>
-                    </TouchableOpacity>
-                </View>
-            ) : (
-                <View style={styles.fabContainer}>
-                    <TouchableOpacity style={styles.fab}
-                        onPress={() => {
-                            const myRecord = attendees.find(a => a.memberId === profile?.id);
-                            router.push({
-                                pathname: `/class/${id}/checkin`,
-                                params: {
-                                    memberId: profile?.id ?? '',
-                                    memberName: `${profile?.first_name} ${profile?.last_name}`,
-                                    memberAvatar: profile?.profile_picture ?? '',
-                                    isCheckedIn: myRecord?.status === 'checked-in' ? 'true' : 'false',
-                                    isRegistered: myRecord?.status === 'registered' || myRecord?.status === 'checked-in' ? 'true' : 'false',
-                                },
-                            });
-                        }}
-                        activeOpacity={0.85}
-                    >
+            <View style={styles.fabContainer}>
+                {isCoachOrAdmin ? (
+                    <View style={{ flexDirection: 'row', gap: Spacing.sm }}>
+                        <TouchableOpacity style={[styles.fab, { flex: 1 }]}
+                            onPress={() => router.push(`/class/${id}/search`)} activeOpacity={0.85}>
+                            <Feather name="plus" size={20} color={Colors.primaryForeground} />
+                            <Text style={styles.fabText}>{i18n.t('class.add_checkin')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.fab, { backgroundColor: Colors.text, paddingHorizontal: Spacing.lg }]}
+                            onPress={() => router.push(`/class/${id}/scan`)} activeOpacity={0.85}>
+                            <Feather name="maximize" size={20} color={Colors.primaryForeground} />
+                        </TouchableOpacity>
+                    </View>
+                ) : (
+                    <View style={{ flexDirection: 'row', gap: Spacing.sm }}>
                         {(() => {
                             const myRecord = attendees.find(a => a.memberId === profile?.id);
                             const isReg = myRecord?.status === 'registered' || myRecord?.status === 'checked-in';
-                            const isCheck = myRecord?.status === 'checked-in';
 
-                            if (isCheck) {
-                                return (
-                                    <>
-                                        <Feather name="check-circle" size={20} color={Colors.primaryForeground} />
-                                        <Text style={styles.fabText}>{i18n.t('class.attendance_confirmed')}</Text>
-                                    </>
-                                );
-                            } else if (isReg) {
-                                return (
-                                    <>
-                                        <Feather name="check" size={20} color={Colors.primaryForeground} />
-                                        <Text style={styles.fabText}>{i18n.t('class.confirm_attendance')}</Text>
-                                    </>
-                                );
-                            } else {
-                                return (
-                                    <>
-                                        <Feather name="calendar" size={20} color={Colors.primaryForeground} />
-                                        <Text style={styles.fabText}>{i18n.t('class.book_class')}</Text>
-                                    </>
-                                );
-                            }
+                            return isReg ? (
+                                <TouchableOpacity style={[styles.fab, { backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border }]}
+                                    onPress={() => router.push(`/class/${id}/qr`)} activeOpacity={0.85}>
+                                    <Feather name="grid" size={20} color={Colors.text} />
+                                    <Text style={[styles.fabText, { color: Colors.text }]}>{i18n.t('class.qr_pass', { defaultValue: 'Pase QR' })}</Text>
+                                </TouchableOpacity>
+                            ) : null;
                         })()}
-                    </TouchableOpacity>
-                </View>
-            )}
+
+                        <TouchableOpacity style={[styles.fab, { flex: 1 }]}
+                            onPress={() => {
+                                const myRecord = attendees.find(a => a.memberId === profile?.id);
+                                router.push({
+                                    pathname: `/class/${id}/checkin`,
+                                    params: {
+                                        memberId: profile?.id ?? '',
+                                        memberName: `${profile?.first_name} ${profile?.last_name}`,
+                                        memberAvatar: profile?.profile_picture ?? '',
+                                        isCheckedIn: myRecord?.status === 'checked-in' ? 'true' : 'false',
+                                        isRegistered: myRecord?.status === 'registered' || myRecord?.status === 'checked-in' ? 'true' : 'false',
+                                    },
+                                });
+                            }}
+                            activeOpacity={0.85}
+                        >
+                            {(() => {
+                                const myRecord = attendees.find(a => a.memberId === profile?.id);
+                                const isReg = myRecord?.status === 'registered' || myRecord?.status === 'checked-in';
+                                const isCheck = myRecord?.status === 'checked-in';
+
+                                if (isCheck) {
+                                    return (
+                                        <>
+                                            <Feather name="check-circle" size={20} color={Colors.primaryForeground} />
+                                            <Text style={styles.fabText}>{i18n.t('class.attendance_confirmed')}</Text>
+                                        </>
+                                    );
+                                } else if (isReg) {
+                                    return (
+                                        <>
+                                            <Feather name="check" size={20} color={Colors.primaryForeground} />
+                                            <Text style={styles.fabText}>{i18n.t('class.confirm_attendance')}</Text>
+                                        </>
+                                    );
+                                } else {
+                                    return (
+                                        <>
+                                            <Feather name="calendar" size={20} color={Colors.primaryForeground} />
+                                            <Text style={styles.fabText}>{i18n.t('class.book_class')}</Text>
+                                        </>
+                                    );
+                                }
+                            })()}
+                        </TouchableOpacity>
+                    </View>
+                )}
+            </View>
         </SafeAreaView>
     );
 }

@@ -40,6 +40,20 @@ export const translations = {
         profile: {
             title: "Profile",
             logout: "Log Out",
+        },
+        qr: {
+            pass_title: 'Your QR Pass',
+            pass_desc: 'Show this code to the Coach at the entrance. The code will regenerate automatically and expire in 5 minutes for security.',
+            go_back: 'Go Back',
+            invalid_class: 'This QR belongs to another class.',
+            expired: 'This QR code has expired (more than 5 minutes). Ask the member to generate a new one.',
+            invalid: 'Invalid QR',
+            cam_permission: 'We need camera permissions to scan QRs.',
+            grant_permission: 'Grant Permission',
+            scan_title: 'Scan Pass',
+            point_cam: "Point the camera at the member's QR code",
+            validating: 'Validating Check-In...',
+            scanned_member: 'Scanned QR',
         }
     },
     es: {
@@ -83,6 +97,20 @@ export const translations = {
         profile: {
             title: "Perfil",
             logout: "Cerrar Sesión",
+        },
+        qr: {
+            pass_title: 'Tu Pase QR',
+            pass_desc: 'Muestra este código al Coach en la entrada. El código se regenerará automáticamente y caducará en 5 minutos por seguridad.',
+            go_back: 'Volver Atrás',
+            invalid_class: 'Este QR pertenece a otra clase.',
+            expired: 'Este código QR ha caducado (más de 5 minutos). Dile al alumno que genere uno nuevo.',
+            invalid: 'QR Inválido',
+            cam_permission: 'Necesitamos permiso de cámara para escanear los QRs.',
+            grant_permission: 'Conceder Permiso',
+            scan_title: 'Escanear Pase',
+            point_cam: 'Apunta la cámara al código QR del alumno',
+            validating: 'Validando Check-In...',
+            scanned_member: 'QR Escaneado',
         }
     },
     ca: {
@@ -126,6 +154,20 @@ export const translations = {
         profile: {
             title: "Perfil",
             logout: "Tancar Sessió",
+        },
+        qr: {
+            pass_title: 'El Teu Pas QR',
+            pass_desc: "Mostra aquest codi a l'Entrenador a l'entrada. El codi es regenerarà automàticament i caducarà en 5 minuts per seguretat.",
+            go_back: 'Tornar Enrere',
+            invalid_class: 'Aquest QR pertany a una altra classe.',
+            expired: "Aquest codi QR ha caducat (més de 5 minuts). Digues a l'alumne que en generi un de nou.",
+            invalid: 'QR Invàlid',
+            cam_permission: 'Necessitem permís de càmera per escanejar els QRs.',
+            grant_permission: 'Concedir Permís',
+            scan_title: 'Escanejar Pas',
+            point_cam: "Apunta la càmera al codi QR de l'alumne",
+            validating: 'Validant Check-In...',
+            scanned_member: 'QR Escanejat',
         }
     },
     de: {
@@ -169,6 +211,20 @@ export const translations = {
         profile: {
             title: "Profil",
             logout: "Abmelden",
+        },
+        qr: {
+            pass_title: 'Dein QR-Pass',
+            pass_desc: 'Zeige diesen Code dem Trainer am Eingang. Der Code wird automatisch neu generiert und läuft aus Sicherheitsgründen in 5 Minuten ab.',
+            go_back: 'Zurück',
+            invalid_class: 'Dieser QR gehört zu einer anderen Klasse.',
+            expired: 'Dieser QR-Code ist abgelaufen (mehr als 5 Minuten). Bitten Sie das Mitglied, einen neuen zu generieren.',
+            invalid: 'Ungültiger QR',
+            cam_permission: 'Wir benötigen Kameraberechtigungen, um QRs zu scannen.',
+            grant_permission: 'Erlaubnis erteilen',
+            scan_title: 'Pass Scannen',
+            point_cam: 'Richten Sie die Kamera auf den QR-Code des Mitglieds',
+            validating: 'Check-In wird überprüft...',
+            scanned_member: 'Gescannter QR',
         }
     },
     fr: {
@@ -212,6 +268,20 @@ export const translations = {
         profile: {
             title: "Profil",
             logout: "Se déconnecter",
+        },
+        qr: {
+            pass_title: 'Votre Pass QR',
+            pass_desc: "Montrez ce code à l'entraîneur à l'entrée. Le code sera regénéré automatiquement et expirera dans 5 minutes par sécurité.",
+            go_back: 'Retour',
+            invalid_class: 'Ce QR appartient à un autre cours.',
+            expired: 'Ce code QR a expiré (plus de 5 minutes). Demandez au membre de générer un nouveau.',
+            invalid: 'QR Invalide',
+            cam_permission: 'Nous avons besoin des autorisations de la caméra pour scanner les QR.',
+            grant_permission: 'Accorder la permission',
+            scan_title: 'Scanner le pass',
+            point_cam: 'Pointez la caméra sur le code QR du membre',
+            validating: 'Validation du Check-In...',
+            scanned_member: 'QR Scanné',
         }
     },
     it: {
@@ -255,6 +325,20 @@ export const translations = {
         profile: {
             title: "Profilo",
             logout: "Disconnettersi",
+        },
+        qr: {
+            pass_title: 'Il Tuo Pass QR',
+            pass_desc: "Mostra questo codice all'Allenatore all'ingresso. Il codice verrà rigenerato automaticamente e scadrà in 5 minuti per sicurezza.",
+            go_back: 'Torna Indietro',
+            invalid_class: 'Questo QR appartiene a un altra classe.',
+            expired: "Questo codice QR è scaduto (più di 5 minuti). Chiedi al membro di generarne uno nuovo.",
+            invalid: 'QR Non Valido',
+            cam_permission: 'Abbiamo bisogno dei permessi della fotocamera per scansionare i QR.',
+            grant_permission: 'Concedi il permesso',
+            scan_title: 'Scansiona Pass',
+            point_cam: 'Punta la fotocamera sul codice QR del membro',
+            validating: 'Validazione del Check-In...',
+            scanned_member: 'QR Scansionato',
         }
     }
 };
