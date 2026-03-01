@@ -41,15 +41,12 @@ export type CheckIn = {
 
 
 export async function fetchClasses(): Promise<Class[]> {
-    // Only fetch classes for today
-    const today = new Date().toISOString().split('T')[0];
 
     const { data, error } = await supabase
         .from('classes')
         .select('*')
-        .gte('start_time', `${today}T00:00:00.000Z`)
-        .lte('start_time', `${today}T23:59:59.999Z`)
-        .order('start_time');
+        .order('start_time')
+        .limit(20);
     if (error) throw error;
     return data ?? [];
 }
@@ -67,8 +64,6 @@ export async function fetchAttendeeCounts(): Promise<Record<string, number>> {
         counts[a.class_id] = (counts[a.class_id] ?? 0) + 1;
     }
 
-    // check-ins that are NOT already in attendees (new walk-ins)
-    // For simplicity just add all check-ins — deduplication happens in class detail
     for (const ci of checkIns ?? []) {
         counts[ci.class_id] = (counts[ci.class_id] ?? 0) + 1;
     }
