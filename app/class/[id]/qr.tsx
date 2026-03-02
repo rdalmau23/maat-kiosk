@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -7,11 +7,16 @@ import QRCode from 'react-native-qrcode-svg';
 import { Text } from '@/components/Text';
 import { Colors, Spacing, Typography, Radii, Shadow } from '@/constants/theme';
 import { useAuthStore } from '@/store/useAuthStore';
+import { useCacheStore } from '@/store/useCacheStore';
+import { isMemberCheckedIn } from '@/lib/api';
 import i18n from '@/lib/i18n';
 
 export default function QRCodeScreen() {
     const { profile } = useAuthStore();
     const { id: classId } = useLocalSearchParams<{ id: string }>();
+    const { classes } = useCacheStore();
+
+    const cls = classes.find(c => c.id === classId);
 
     const qrPayload = useMemo(() => {
         if (!classId || !profile?.id) return '';
@@ -23,6 +28,40 @@ export default function QRCodeScreen() {
         };
         return JSON.stringify(payload);
     }, [classId, profile?.id]);
+
+    useEffect(() => {
+        if (!classId || !profile?.id) return;
+
+        let isMounted = true;
+        let interval: NodeJS.Timeout;
+
+        const checkStatus = async () => {
+            try {
+                const checkedIn = await isMemberCheckedIn(classId, profile.id);
+                if (checkedIn && isMounted) {
+                    clearInterval(interval);
+                    router.replace({
+                        pathname: '/success',
+                        params: {
+                            memberName: `${profile.first_name} ${profile.last_name}`,
+                            className: cls?.name ?? 'Class',
+                            classId
+                        },
+                    });
+                }
+            } catch (error) {
+                // Ignore silent poll errors
+            }
+        };
+
+        interval = setInterval(checkStatus, 3000);
+        checkStatus(); // Initial check
+
+        return () => {
+            isMounted = false;
+            clearInterval(interval);
+        };
+    }, [classId, profile?.id, cls?.name]);
 
     if (!classId || !profile) {
         return (

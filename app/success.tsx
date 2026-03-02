@@ -6,6 +6,7 @@ import { CommonActions } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { Text } from '@/components/Text';
 import { Colors, Spacing, Typography, Radii } from '@/constants/theme';
+import i18n from '@/lib/i18n';
 
 export default function SuccessScreen() {
     const { memberName, className } = useLocalSearchParams<{
@@ -56,16 +57,16 @@ export default function SuccessScreen() {
                 </Animated.View>
 
                 <Animated.View style={[styles.textBlock, { opacity: fadeAnim }]}>
-                    <Text style={styles.title}>You're in! 🎉</Text>
+                    <Text style={styles.title}>{i18n.t('success_screen.title')}</Text>
                     <Text style={styles.memberName}>{memberName}</Text>
                     <Text style={styles.subtitle}>
-                        Checked in for{'\n'}
+                        {i18n.t('success_screen.subtitle')}{'\n'}
                         <Text style={styles.className}>{className}</Text>
                     </Text>
                 </Animated.View>
 
                 <Animated.Text style={[styles.resetHint, { opacity: fadeAnim }]}>
-                    Returning to home…
+                    {i18n.t('success_screen.returning')}
                 </Animated.Text>
             </View>
         </SafeAreaView>

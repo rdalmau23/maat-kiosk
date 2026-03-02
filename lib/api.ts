@@ -126,7 +126,10 @@ export async function fetchCheckIns(classId: string): Promise<CheckIn[]> {
 export async function insertCheckIn(classId: string, memberId: string): Promise<void> {
     const { error } = await supabase
         .from('check_ins')
-        .insert({ class_id: classId, member_id: memberId });
+        .upsert(
+            { class_id: classId, member_id: memberId },
+            { onConflict: 'class_id, member_id', ignoreDuplicates: true }
+        );
     if (error) throw error;
 }
 

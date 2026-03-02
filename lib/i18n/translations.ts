@@ -54,6 +54,11 @@ export const translations = {
             point_cam: "Point the camera at the member's QR code",
             validating: 'Validating Check-In...',
             scanned_member: 'Scanned QR',
+        },
+        success_screen: {
+            title: "You're in! 🎉",
+            subtitle: "Checked in for",
+            returning: "Returning to home…",
         }
     },
     es: {
@@ -111,6 +116,11 @@ export const translations = {
             point_cam: 'Apunta la cámara al código QR del alumno',
             validating: 'Validando Check-In...',
             scanned_member: 'QR Escaneado',
+        },
+        success_screen: {
+            title: "¡Estás dentro! 🎉",
+            subtitle: "Registrado/a en la clase de",
+            returning: "Volviendo al inicio…",
         }
     },
     ca: {
@@ -168,6 +178,11 @@ export const translations = {
             point_cam: "Apunta la càmera al codi QR de l'alumne",
             validating: 'Validant Check-In...',
             scanned_member: 'QR Escanejat',
+        },
+        success_screen: {
+            title: "Ja ets dins! 🎉",
+            subtitle: "Registrat/da a la classe de",
+            returning: "Tornant a l'inici…",
         }
     },
     de: {
@@ -225,6 +240,11 @@ export const translations = {
             point_cam: 'Richten Sie die Kamera auf den QR-Code des Mitglieds',
             validating: 'Check-In wird überprüft...',
             scanned_member: 'Gescannter QR',
+        },
+        success_screen: {
+            title: "Du bist drin! 🎉",
+            subtitle: "Eingecheckt für",
+            returning: "Zurück zur Startseite…",
         }
     },
     fr: {
@@ -282,6 +302,11 @@ export const translations = {
             point_cam: 'Pointez la caméra sur le code QR du membre',
             validating: 'Validation du Check-In...',
             scanned_member: 'QR Scanné',
+        },
+        success_screen: {
+            title: "Vous y êtes ! 🎉",
+            subtitle: "Enregistré à",
+            returning: "Retour à l'accueil…",
         }
     },
     it: {
@@ -339,6 +364,11 @@ export const translations = {
             point_cam: 'Punta la fotocamera sul codice QR del membro',
             validating: 'Validazione del Check-In...',
             scanned_member: 'QR Scansionato',
+        },
+        success_screen: {
+            title: "Ci sei! 🎉",
+            subtitle: "Registrato/a per",
+            returning: "Ritorno alla home…",
         }
     }
 };
