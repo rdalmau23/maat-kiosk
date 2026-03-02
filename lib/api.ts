@@ -146,6 +146,15 @@ export async function insertAttendee(classId: string, memberId: string): Promise
     if (error) throw error;
 }
 
+export async function confirmAttendee(classId: string, memberId: string): Promise<void> {
+    const { error } = await supabase
+        .from('attendees')
+        .update({ status: 'confirmed' })
+        .eq('class_id', classId)
+        .eq('member_id', memberId);
+    if (error) throw error;
+}
+
 export async function deleteAttendee(classId: string, memberId: string): Promise<void> {
     const { error } = await supabase
         .from('attendees')

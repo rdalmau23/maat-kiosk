@@ -26,10 +26,16 @@ export default function ScanScreen() {
         setScanned(true);
 
         try {
-            // 1. Parse payload
-            const payload = JSON.parse(data);
+            // 1. Parse payload (safely handle non-JSON QRs)
+            let payload;
+            try {
+                payload = JSON.parse(data);
+            } catch (err) {
+                throw new Error(i18n.t('qr.invalid', { defaultValue: 'Código QR no reconocido' }));
+            }
+
             if (!payload.memberId || !payload.classId || !payload.timestamp) {
-                throw new Error("Invalid QR Code payload.");
+                throw new Error(i18n.t('qr.invalid', { defaultValue: 'Código QR no reconocido' }));
             }
 
             // 2. Validate Class ID match

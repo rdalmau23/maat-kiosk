@@ -166,8 +166,7 @@ export default function ClassScreen() {
                             memberId: item.memberId,
                             memberName: `${item.firstName} ${item.lastName}`,
                             memberAvatar: item.profilePicture ?? '',
-                            isCheckedIn: isCheckedIn ? 'true' : 'false',
-                            isRegistered: item.status === 'registered' || item.status === 'checked-in' ? 'true' : 'false',
+                            status: item.status,
                         },
                     }) : undefined}
                 />
@@ -230,13 +229,13 @@ export default function ClassScreen() {
                     <View style={{ flexDirection: 'row', gap: Spacing.sm }}>
                         {(() => {
                             const myRecord = attendees.find(a => a.memberId === profile?.id);
-                            const isReg = myRecord?.status === 'registered' || myRecord?.status === 'checked-in';
+                            const isReg = !!myRecord;
 
                             return isReg ? (
                                 <TouchableOpacity style={[styles.fab, { backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border }]}
                                     onPress={() => router.push(`/class/${id}/qr`)} activeOpacity={0.85}>
                                     <Feather name="grid" size={20} color={Colors.text} />
-                                    <Text style={[styles.fabText, { color: Colors.text }]}>{i18n.t('class.qr_pass', { defaultValue: 'Pase QR' })}</Text>
+                                    <Text style={[styles.fabText, { color: Colors.text }]}>{i18n.t('class.qr_pass', { defaultValue: 'QR Pass' })}</Text>
                                 </TouchableOpacity>
                             ) : null;
                         })()}
@@ -250,8 +249,7 @@ export default function ClassScreen() {
                                         memberId: profile?.id ?? '',
                                         memberName: `${profile?.first_name} ${profile?.last_name}`,
                                         memberAvatar: profile?.profile_picture ?? '',
-                                        isCheckedIn: myRecord?.status === 'checked-in' ? 'true' : 'false',
-                                        isRegistered: myRecord?.status === 'registered' || myRecord?.status === 'checked-in' ? 'true' : 'false',
+                                        status: myRecord?.status ?? 'none',
                                     },
                                 });
                             }}
@@ -259,17 +257,23 @@ export default function ClassScreen() {
                         >
                             {(() => {
                                 const myRecord = attendees.find(a => a.memberId === profile?.id);
-                                const isReg = myRecord?.status === 'registered' || myRecord?.status === 'checked-in';
-                                const isCheck = myRecord?.status === 'checked-in';
+                                const status = myRecord?.status;
 
-                                if (isCheck) {
+                                if (status === 'checked-in') {
                                     return (
                                         <>
                                             <Feather name="check-circle" size={20} color={Colors.primaryForeground} />
+                                            <Text style={styles.fabText}>{i18n.t('class.attendance_confirmed', { defaultValue: 'Checked In' })}</Text>
+                                        </>
+                                    );
+                                } else if (status === 'confirmed') {
+                                    return (
+                                        <>
+                                            <Feather name="check" size={20} color={Colors.primaryForeground} />
                                             <Text style={styles.fabText}>{i18n.t('class.attendance_confirmed')}</Text>
                                         </>
                                     );
-                                } else if (isReg) {
+                                } else if (status === 'registered') {
                                     return (
                                         <>
                                             <Feather name="check" size={20} color={Colors.primaryForeground} />

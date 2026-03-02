@@ -12,7 +12,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { Text } from '@/components/Text';
 import { Colors, Spacing, Typography, Radii, Shadow } from '@/constants/theme';
-import { fetchClass, insertCheckIn, deleteCheckIn, insertAttendee, deleteAttendee, fetchClassCheckInCount } from '@/lib/api';
+import { fetchClass, insertCheckIn, deleteCheckIn, insertAttendee, deleteAttendee, confirmAttendee, fetchClassCheckInCount } from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import i18n from '@/lib/i18n';
 
@@ -20,18 +20,18 @@ export default function CheckInScreen() {
     const { profile } = useAuthStore();
     const isCoachOrAdmin = profile?.role === 'admin' || profile?.role === 'coach';
 
-    const { id: classId, memberId, memberName, memberAvatar, isCheckedIn, isRegistered } =
+    const { id: classId, memberId, memberName, memberAvatar, status } =
         useLocalSearchParams<{
             id: string;
             memberId: string;
             memberName: string;
             memberAvatar: string;
-            isCheckedIn?: string;
-            isRegistered?: string;
+            status?: string;
         }>();
 
-    const isAlreadyCheckedIn = isCheckedIn === 'true';
-    const isAlreadyRegistered = isRegistered === 'true';
+    const isAlreadyCheckedIn = status === 'checked-in';
+    const isAlreadyConfirmed = status === 'confirmed';
+    const isAlreadyRegistered = status === 'registered';
 
     const [className, setClassName] = useState('');
     const [classCapacity, setClassCapacity] = useState(0);
@@ -48,7 +48,7 @@ export default function CheckInScreen() {
 
     useEffect(() => { load(); }, [load]);
 
-    const handleAction = async (type: 'register' | 'unregister' | 'checkin' | 'uncheckin') => {
+    const handleAction = async (type: 'register' | 'unregister' | 'checkin' | 'uncheckin' | 'confirm') => {
         if (!classId || !memberId || submitting) return;
 
         setSubmitting(true);
@@ -73,6 +73,12 @@ export default function CheckInScreen() {
                 router.replace({
                     pathname: '/success',
                     params: { memberName, className, classId, isRegistration: 'true' },
+                });
+            } else if (type === 'confirm') {
+                await confirmAttendee(classId, memberId);
+                router.replace({
+                    pathname: '/success',
+                    params: { memberName, className, classId, isConfirmation: 'true' },
                 });
             } else if (type === 'unregister') {
                 await deleteAttendee(classId, memberId);
@@ -108,7 +114,7 @@ export default function CheckInScreen() {
                 <Text style={styles.topTitle}>
                     {isCoachOrAdmin
                         ? (isAlreadyCheckedIn ? i18n.t('checkin.cancel_checkin') : i18n.t('checkin.confirm_checkin'))
-                        : (isAlreadyRegistered ? i18n.t('checkin.cancel_registration') : i18n.t('checkin.register'))}
+                        : ((isAlreadyConfirmed || isAlreadyRegistered) ? i18n.t('checkin.cancel_registration', { defaultValue: 'Cancel Booking' }) : i18n.t('checkin.register'))}
                 </Text>
                 <View style={{ width: 38 }} />
             </View>
@@ -152,7 +158,7 @@ export default function CheckInScreen() {
                 ) : (
                     // MEMBER BUTTONS
                     <View style={{ gap: Spacing.md, width: '100%' }}>
-                        {!isAlreadyRegistered && !isAlreadyCheckedIn ? (
+                        {!isAlreadyRegistered && !isAlreadyConfirmed && !isAlreadyCheckedIn ? (
                             <TouchableOpacity
                                 style={[styles.checkInBtn, submitting && styles.checkInBtnDisabled]}
                                 onPress={() => handleAction('register')}
@@ -168,11 +174,11 @@ export default function CheckInScreen() {
                             </TouchableOpacity>
                         ) : null}
 
-                        {isAlreadyRegistered && !isAlreadyCheckedIn ? (
+                        {isAlreadyRegistered ? (
                             <>
                                 <TouchableOpacity
                                     style={[styles.checkInBtn, submitting && styles.checkInBtnDisabled, { backgroundColor: Colors.success }]}
-                                    onPress={() => handleAction('checkin')}
+                                    onPress={() => handleAction('confirm')}
                                     activeOpacity={0.85}
                                     disabled={submitting}
                                 >
@@ -200,10 +206,10 @@ export default function CheckInScreen() {
                             </>
                         ) : null}
 
-                        {isAlreadyCheckedIn ? (
+                        {isAlreadyConfirmed ? (
                             <TouchableOpacity
                                 style={[styles.checkInBtn, styles.cancelBtn, submitting && styles.checkInBtnDisabled]}
-                                onPress={() => handleAction('uncheckin')}
+                                onPress={() => handleAction('unregister')}
                                 activeOpacity={0.85}
                                 disabled={submitting}
                             >
