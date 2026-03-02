@@ -1,12 +1,9 @@
 # Gym Kiosk - Rafel Dalmau
 
-> **Demo credentials** — copy this into your `.env` to run the project:
-> ```
-> EXPO_PUBLIC_SUPABASE_URL=https://zjfqyyplvtouqvlbtskh.supabase.co
-> EXPO_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqZnF5eXBsdnRvdXF2bGJ0c2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODYxNjMsImV4cCI6MjA4Nzk2MjE2M30.pQj5-hm1nRhc0zD82M2JJ2clT-UXtNJSLMNAThcTC0Q
-> ```
-> The Supabase database is already seeded — no extra setup required.
-> **Note on Security:** The `SUPABASE_SERVICE_ROLE_KEY` is purposefully omitted from this repository for security reasons.
+> **Zero Setup Required:**
+> The Supabase database is already seeded, and the API keys (Anon Key & URL) are securely hardcoded as fallbacks for the demo environments. You do not need a `.env` file to run this project. Just `npm install` and start
+>
+> **Note on Security:** The `SUPABASE_SERVICE_ROLE_KEY` used for initial Database seeding is purposefully omitted from this repository for security reasons. It is not required to run the App.
 
 ## Architecture
 
@@ -48,10 +45,7 @@ File-based routing with Expo Router (v3), a thin Supabase API layer (`lib/api.ts
 # 1. Install dependencies
 npm install
 
-# 2. Create .env (copy the demo credentials above)
-cp .env.example .env
-
-# 3. Start the app
+# 2. Start the app
 npx expo start --clear
 ```
 

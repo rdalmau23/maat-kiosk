@@ -1,12 +1,3 @@
-/**
- * SEED SCRIPT FOR AUTH & RBAC (Feature Branch)
- *
- * Requirements:
- * 1. You MUST have EXPO_PUBLIC_SUPABASE_URL in your .env
- * 2. You MUST have SUPABASE_SERVICE_ROLE_KEY in your .env (Not the Anon key!)
- *    - You can find the Service Role Key in Supabase -> Project Settings -> API.
- * 3. Disable "Confirm Email" in Supabase -> Authentication -> Providers -> Email.
- */
 import { config } from 'dotenv';
 config();
 
