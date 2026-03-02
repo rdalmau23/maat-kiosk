@@ -1,11 +1,8 @@
 # Gym Kiosk - Rafel Dalmau
 
-> **Demo credentials** — copy this into your `.env` to run the project:
-> ```
-> EXPO_PUBLIC_SUPABASE_URL=https://nxnkniyzteqwmdpqiovz.supabase.co
-> EXPO_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54bmtuaXl6dGVxd21kcHFpb3Z6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyOTEyMzcsImV4cCI6MjA4Nzg2NzIzN30.l_7sd_QfxiSuh-aEUxJzO--0MsfidlmpTww7iWS3-8I
-> ```
-> The Supabase database is already seeded — no extra setup required.
+> **Zero Setup Required:**
+> The Supabase database is already seeded, and the API keys (Anon Key & URL) are securely hardcoded as fallbacks for the demo environments. You do not need a `.env` file to run this project. Just `npm install` and start
+>
 
 ## Architecture
 
